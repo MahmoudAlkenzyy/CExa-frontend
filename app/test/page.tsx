@@ -1,6 +1,7 @@
 "use client";
+import * as React from 'react'
 import useSpeachStore from "@/lib/store";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaMicrophoneAltSlash, FaPhoneAlt } from "react-icons/fa";
 import { FaPhoneSlash } from "react-icons/fa6";
 // import { throttle } from 'lodash';

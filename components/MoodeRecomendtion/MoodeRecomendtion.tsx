@@ -19,7 +19,7 @@ const MoodeRecomendtion: React.FC = () => {
   const updatData = useSpeachStore((state) => state.updateData);
   const client = useSpeachStore((state) => state.client);
   const sent = client[client.length - 1];
-  const { positivePercent, negativePercent } = useSpeachStore((state) => state);
+  const { positivePercent } = useSpeachStore((state) => state);
 
   const analyzeSentiment = useCallback(async () => {
     const endpoint =
@@ -54,36 +54,36 @@ const MoodeRecomendtion: React.FC = () => {
     if (sent && sent.isclient) analyzeSentiment();
   }, [sent, analyzeSentiment]);
   // console.log({ sent });
-  let message = "";
+//   let message = "";
 
-  if (sentiment == "positive") {
-    // الشعور الإيجابي أعلى بكثير
-    if (positivePercent <= 25) {
-      message =
-        "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك.";
-    } else if (positivePercent <= 50) {
-      message =
-        "نقدّر ملاحظاتك ونأسف لأي إزعاج. نعمل دائمًا على تحسين خدماتنا، وسنسعى لمعالجة أي مشكلات تواجهها لضمان رضاك.";
-    } else {
-      message =
-        "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك.";
-    }
-  } else if (sentiment == "negative") {
-    // الشعور السلبي أعلى بكثير
-    if (negativePercent <= 25) {
-      message =
-        "شكرًا على ملاحظتك، ونأسف لأي إزعاج شعرت به. نحن هنا لدعمك وسنحرص على تحسين تجربتك مستقبلاً.";
-    } else if (negativePercent <= 50) {
-      message =
-        "نتفهم تمامًا سبب انزعاجك، ونأسف لأي إزعاج سبّبناه لك. نحن هنا لحل المشكلة وسنبذل قصارى جهدنا لجعل الأمور أفضل.";
-    } else {
-      message =
-        "نقدّر ملاحظاتك جدًا، وهدفنا دائمًا تحسين تجربتك. سنعمل على معالجة أي مشكلة واجهتها لضمان رضاك التام.";
-    }
-  } else {
-    // المشاعر متقاربة (متوازنة بين الإيجابي والسلبي)
-    message = " اقدر اساعدك ازاي ";
-  }
+//   if (sentiment == "positive") {
+//     // الشعور الإيجابي أعلى بكثير
+//     if (positivePercent <= 25) {
+//       message =
+//         "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك.";
+//     } else if (positivePercent <= 50) {
+//       message =
+//         "نقدّر ملاحظاتك ونأسف لأي إزعاج. نعمل دائمًا على تحسين خدماتنا، وسنسعى لمعالجة أي مشكلات تواجهها لضمان رضاك.";
+//     } else {
+//       message =
+//         "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك.";
+//     }
+//   } else if (sentiment == "negative") {
+//     // الشعور السلبي أعلى بكثير
+//     if (negativePercent <= 25) {
+//       message =
+//         "شكرًا على ملاحظتك، ونأسف لأي إزعاج شعرت به. نحن هنا لدعمك وسنحرص على تحسين تجربتك مستقبلاً.";
+//     } else if (negativePercent <= 50) {
+//       message =
+//         "نتفهم تمامًا سبب انزعاجك، ونأسف لأي إزعاج سبّبناه لك. نحن هنا لحل المشكلة وسنبذل قصارى جهدنا لجعل الأمور أفضل.";
+//     } else {
+//       message =
+//         "نقدّر ملاحظاتك جدًا، وهدفنا دائمًا تحسين تجربتك. سنعمل على معالجة أي مشكلة واجهتها لضمان رضاك التام.";
+//     }
+//   } else {
+//     // المشاعر متقاربة (متوازنة بين الإيجابي والسلبي)
+//     message = " اقدر اساعدك ازاي ";
+//   }
   // console.log({ message });
 
   return (

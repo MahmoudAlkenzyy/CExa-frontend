@@ -43,8 +43,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
     return structuredData;
   };
 
-    const test = async () => {
-      
+  const test = async () => {
     try {
       // console.log(data1.current);
       addSum({ point1: "", point2: "", point3: "", point4: "", point5: "" });
@@ -65,7 +64,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
         point5: x.point5,
       });
       extractData(data.message);
-      console.log(data);
+      //   console.log(data);
 
       console.log({ data: extractData(data.message) });
     } catch (err) {
@@ -162,26 +161,27 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
 
   return (
     <div className=" ">
-          <div className="flex justify-center gap-5 bg-white rounded-b-xl py-5">
-
+      <div className="flex justify-center gap-5 bg-white rounded-b-xl py-5">
         <button
-            className={`bg-green-500  hover:scale-105 transition-all duration-[400] hover:bg-opacity-90 rounded-full w-10 h-10 text-white flex justify-center items-center ${
-                isRecognizing && "cursor-not-allowed"
-              }`} onClick={startRecognition}
-        //   disabled={isRecognizing}
+          className={`bg-green-500  hover:scale-105 transition-all duration-[400] hover:bg-opacity-90 rounded-full w-10 h-10 text-white flex justify-center items-center ${
+            isRecognizing && "cursor-not-allowed"
+          }`}
+          onClick={startRecognition}
+          //   disabled={isRecognizing}
         >
-         <FaPhoneAlt />
-              </button>
-                 <button className="bg-[#D9D9D97D] hover:scale-105 transition-all duration-[400] hover:bg-opacity-90  rounded-full w-10 h-10 text-[#00000099] flex justify-center items-center">
-                        <FaMicrophoneAltSlash />
-                      </button>
+          <FaPhoneAlt />
+        </button>
+        <button className="bg-[#D9D9D97D] hover:scale-105 transition-all duration-[400] hover:bg-opacity-90  rounded-full w-10 h-10 text-[#00000099] flex justify-center items-center">
+          <FaMicrophoneAltSlash />
+        </button>
         <button
           className={`bg-red-500  hover:scale-105 transition-all duration-[400] hover:bg-opacity-90 rounded-full w-10 h-10 text-white flex justify-center items-center ${
             !isRecognizing && "cursor-not-allowed"
-          }`}onClick={stopRecognition}
-        //   disabled={!isRecognizing}
+          }`}
+          onClick={stopRecognition}
+          //   disabled={!isRecognizing}
         >
-            <FaPhoneSlash />
+          <FaPhoneSlash />
         </button>
       </div>
       <MyDialog setOpen={setIsOpen} isOpen={isOpen} />

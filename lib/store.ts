@@ -12,7 +12,7 @@ interface SpeachState {
   markerPosition: number;
   maxValue: number;
   filledBars: number;
-  client: string[];
+  client: { isclient: boolean; message: string }[];
   sum: {
     point1: string;
     point2: string;
@@ -28,7 +28,7 @@ interface SpeachState {
     point4: string;
     point5: string;
   }) => void;
-  addClient: (newClient: string) => void;
+  addClient: (newClient: { isclient: boolean; message: string }) => void;
 }
 
 // Create the store
@@ -97,7 +97,7 @@ const useSpeachStore = create<SpeachState>((set) => ({
 
   addClient: (newClient) => {
     // console.log({newClient});
-    
+
     set((state) => ({
       client: [...state.client, newClient],
     }));

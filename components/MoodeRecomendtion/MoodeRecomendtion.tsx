@@ -18,7 +18,7 @@ const MoodeRecomendtion: React.FC = () => {
 
   const updatData = useSpeachStore((state) => state.updateData);
   const client = useSpeachStore((state) => state.client);
-const sent = client[client.length - 1]
+  const sent = client[client.length - 1];
   const { positivePercent, negativePercent } = useSpeachStore((state) => state);
 
   const analyzeSentiment = useCallback(async () => {
@@ -30,7 +30,7 @@ const sent = client[client.length - 1]
       new AzureKeyCredential(apiKey)
     );
 
-    const documents = [sent];
+    const documents = [sent.message];
     const results = (await client.analyzeSentiment(documents)) as SpeachData[];
     // console.log({ sentiment: results[0] });
     // console.log(results, "ssssss");
@@ -51,7 +51,7 @@ const sent = client[client.length - 1]
     // });
   }, [sent, updatData]);
   useEffect(() => {
-    if (sent) analyzeSentiment();
+    if (sent && sent.isclient) analyzeSentiment();
   }, [sent, analyzeSentiment]);
   // console.log({ sent });
   let message = "";
@@ -91,16 +91,8 @@ const sent = client[client.length - 1]
       {/* <MyStateSlider /> */}
       <Card className="!py-2 mb- h-full  bg-white text-xs">
         <div className="text-gray-600 mb-1 h-full   border-[#E5212121] px-[8px] py-[10px]  border rounded-lg border-solid">
-          <h2 className=" mb-2 px-4 text-white rounded py-2 bg-[#1B3E90]">
-            توصيات بناء على حالة العميل
-          </h2>
-          <div
-            className={` ${sentiment == "negative" && "bg-red-50"} 
-               ${sentiment == "positive" && "bg-green-50"} 
-               ${
-                 sentiment == "neutral" && "bg-yellow-50"
-               }  p-2 rounded-lg mb-2`}
-          >
+          <h2 className=" mb-2 px-4 text-white rounded py-2 bg-[#1B3E90] flex justify-between">
+            <span>توصيات بناء على حالة العميل</span>
             <p
               className={`
 
@@ -114,7 +106,16 @@ const sent = client[client.length - 1]
               {sentiment == "negative" && <FaRegAngry size={16} />}
               {sentiment}
             </p>
-          </div>
+          </h2>
+          {/* <div
+            className={` ${sentiment == "negative" && "bg-red-50"} 
+               ${sentiment == "positive" && "bg-green-50"} 
+               ${
+                 sentiment == "neutral" && "bg-yellow-50"
+               }  p-2 rounded-lg mb-2`}
+          >
+        
+          </div> */}
           <p className=" h-[30%] min-h-10    ">
             {sentiment == "positive" &&
               positivePercent <= 25 &&

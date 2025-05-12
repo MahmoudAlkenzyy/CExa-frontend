@@ -246,16 +246,19 @@ const AudioRecorderPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const { addClient } = useSpeachStore();
   const [transcription, setTranscription] = useState("");
+  const messageBuffer = useRef("");
   const audioContextRef = useRef<AudioContext | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioSocket = useRef<WebSocket | null>(null);
   const textSocket = useRef<WebSocket | null>(null);
+  const agentSocket = useRef<WebSocket | null>(null);
   const processorRef = useRef<AudioWorkletNode | null>(null);
-  console.log(transcription);
-
+  //   console.log(transcription);
+const id = "Mahmoud"
   // WebSocket URLs
-  const AUDIO_WS_URL = "ws://172.191.90.91:5000";
-  const TEXT_WS_URL = "ws://172.191.90.91:5001";
+  const AUDIO_WS_URL = "ws://4.227.187.182:5000";
+  const TEXT_WS_URL = "ws://4.227.187.182:5001";
+  const AGENT_URL = "ws://4.227.187.182:5003";
 
   // Audio configuration (matches Python settings)
   const CHUNK_SIZE = 256;
@@ -263,23 +266,67 @@ const AudioRecorderPage = () => {
   const CHANNELS = 1;
 
   useEffect(() => {
-    // Initialize WebSocket connections
-    audioSocket.current = new WebSocket(AUDIO_WS_URL);
-    textSocket.current = new WebSocket(TEXT_WS_URL);
-
-    textSocket.current.onmessage = (event) => {
-      setTranscription(event.data);
-      addClient(event.data);
-      console.log(event.data);
+    // Create socket instances
+    const audio = new WebSocket(AUDIO_WS_URL);
+    const text = new WebSocket(TEXT_WS_URL);
+    const agent = new WebSocket(AGENT_URL);
+  
+    audioSocket.current = audio;
+    textSocket.current = text;
+    agentSocket.current = agent;
+  
+    // TEXT SOCKET
+    text.onmessage = (event) => {
+      const textData = event.data;
+    //   console.log("Text message:", textData);
+      setTranscription(textData);
+  
+      if (textData !== "") {
+        addClient({ isclient: true, message: textData });
+      }
     };
-
+  
+    // AGENT SOCKET
+    agent.onmessage = (event) => {
+      const data = event.data;
+  
+      if (data === "Start Here!!") {
+        messageBuffer.current = "";
+        return;
+      }
+  
+      if (data === "End Here!!") {
+        if (messageBuffer.current !== "") {
+          addClient({ isclient: false, message: messageBuffer.current });
+        }
+        messageBuffer.current = "";
+        return;
+      }
+//   console.log({data,message:messageBuffer.current});
+      messageBuffer.current += data;
+      setTranscription(messageBuffer.current);
+    };
+  
+    // Send initial IDs once sockets are open
+    const sendInitData = (socket: WebSocket) => {
+      socket.onopen = () => {
+        socket.send(JSON.stringify({ id }));
+      };
+    };
+  
+    sendInitData(text);
+    sendInitData(agent);
+    sendInitData(audio);
+  
     return () => {
-      audioSocket.current?.close();
-      textSocket.current?.close();
+      // Clean up sockets on unmount
+      audio.close();
+      text.close();
+      agent.close();
       stopRecording();
     };
   }, []);
-
+  
   const initializeAudio = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({

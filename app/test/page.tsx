@@ -152,6 +152,7 @@ import { FaPhoneSlash } from "react-icons/fa6";
 // };
 
 // export default AudioRecorderPage;
+
 const AudioRecorderPage = () => {
   //   const [isRecording, setIsRecording] = useState(false);
   //   const audioContextRef = useRef<AudioContext | null>(null);
@@ -245,7 +246,6 @@ const AudioRecorderPage = () => {
   //   };
   const [isRecording, setIsRecording] = useState(false);
   const { addClient } = useSpeachStore();
-  const [transcription, setTranscription] = useState("");
   const messageBuffer = useRef("");
   const audioContextRef = useRef<AudioContext | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -279,7 +279,6 @@ const id = "Mahmoud"
     text.onmessage = (event) => {
       const textData = event.data;
     //   console.log("Text message:", textData);
-      setTranscription(textData);
   
       if (textData !== "") {
         addClient({ isclient: true, message: textData });
@@ -304,7 +303,6 @@ const id = "Mahmoud"
       }
 //   console.log({data,message:messageBuffer.current});
       messageBuffer.current += data;
-      setTranscription(messageBuffer.current);
     };
   
     // Send initial IDs once sockets are open
@@ -327,51 +325,58 @@ const id = "Mahmoud"
     };
   }, []);
   
-  const initializeAudio = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          sampleRate: SAMPLE_RATE,
-          channelCount: CHANNELS,
-          echoCancellation: false,
-          noiseSuppression: false,
-        },
-      });
-
-      mediaStreamRef.current = stream;
-      audioContextRef.current = new (window.AudioContext ||
-        (window as any).webkitAudioContext)({
+ const initializeAudio = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
         sampleRate: SAMPLE_RATE,
-      });
+        channelCount: CHANNELS,
+        echoCancellation: false,
+        noiseSuppression: false,
+      },
+    });
 
-      // Load and initialize audio processor
-      await audioContextRef.current.audioWorklet.addModule(
-        "/audio-processor.js"
-      );
-      const source = audioContextRef.current.createMediaStreamSource(stream);
-
-      processorRef.current = new AudioWorkletNode(
-        audioContextRef.current,
-        "audio-processor",
-        { processorOptions: { chunkSize: CHUNK_SIZE } }
-      );
-
-      // Handle processed audio chunks
-      processorRef.current.port.onmessage = (event) => {
-        if (audioSocket.current?.readyState === WebSocket.OPEN) {
-          const rawData = new Uint8Array(event.data);
-          audioSocket.current.send(rawData);
-        }
-      };
-
-      source.connect(processorRef.current);
-      processorRef.current.connect(audioContextRef.current.destination);
-
-      setIsRecording(true);
-    } catch (error) {
-      console.error("Error initializing audio:", error);
+    mediaStreamRef.current = stream;
+    
+    // Type-safe AudioContext initialization without global declarations
+    const AudioContextConstructor = (
+      window.AudioContext || 
+      (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    );
+    
+    if (!AudioContextConstructor) {
+      throw new Error('Web Audio API is not supported in this browser');
     }
-  };
+    
+    audioContextRef.current = new AudioContextConstructor({
+      sampleRate: SAMPLE_RATE,
+    });
+
+    // Rest of your initialization code...
+    await audioContextRef.current.audioWorklet.addModule("/audio-processor.js");
+    const source = audioContextRef.current.createMediaStreamSource(stream);
+
+    processorRef.current = new AudioWorkletNode(
+      audioContextRef.current,
+      "audio-processor",
+      { processorOptions: { chunkSize: CHUNK_SIZE } }
+    );
+
+    processorRef.current.port.onmessage = (event) => {
+      if (audioSocket.current?.readyState === WebSocket.OPEN) {
+        const rawData = new Uint8Array(event.data);
+        audioSocket.current.send(rawData);
+      }
+    };
+
+    source.connect(processorRef.current);
+    processorRef.current.connect(audioContextRef.current.destination);
+
+    setIsRecording(true);
+  } catch (error) {
+    console.error("Error initializing audio:", error);
+  }
+};
 
   const startRecording = async () => {
     if (!isRecording) {

@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
-import Markdown from 'react-markdown'
 import CollapsedList from "../CollapsedList/CollapsedList";
 
 export interface NerDTO {

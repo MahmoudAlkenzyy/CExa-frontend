@@ -2,7 +2,7 @@
 
 import useSpeachStore from "@/lib/store";
 import React, { useEffect, useRef } from "react";
-import ReactMarkdown from "react-markdown";
+// import ReactMarkdown from "react-markdown";
 
 const ChatBox: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -60,9 +60,9 @@ console.log({client});
                   <p className=" text-[#ce6547]  gap-1 w-fit 2 px-4  rounded-lg my-2">
                     <span className="text-xs ">الوكيل: </span>
                     <span>
-                      <ReactMarkdown>
+                      {/* <ReactMarkdown> */}
                         {formatToMarkdown(mess.message)}
-                      </ReactMarkdown>
+                      {/* </ReactMarkdown> */}
                     </span>
                   </p>
                 )}

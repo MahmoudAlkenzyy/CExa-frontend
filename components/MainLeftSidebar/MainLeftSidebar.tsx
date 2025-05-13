@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, ScrollArea } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
-import { ReactMarkdown } from "./../../node_modules/react-markdown/lib/react-markdown";
+// import { ReactMarkdown } from "./../../node_modules/react-markdown/lib/react-markdown";
 import {
   AzureKeyCredential,
   TextAnalyticsClient,
@@ -163,7 +163,9 @@ const MainLeftSidebar: React.FC<MainLeftSidebarProps> = ({ rec }) => {
               <h3 dir="" className="font-medium py-1 pb-3 text-end">
                 {data.name}
               </h3>
-              <ReactMarkdown>{formattedMarkdown}</ReactMarkdown>
+                          {/* <ReactMarkdown> */}
+                          {formattedMarkdown}
+                      {/* </ReactMarkdown> */}
               {/* <AccordionDemo data={data.data} /> */}
             </div>
           </div>

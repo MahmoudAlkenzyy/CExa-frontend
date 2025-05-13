@@ -280,10 +280,11 @@ const id = "Mahmoud"
     text.onmessage = (event) => {
       const textData = event.data;
     //   console.log("Text message:", textData);
+  console.log({"text": event.data});
   
-      if (textData !== "") {
+      
         addClient({ isclient: true, message: textData });
-      }
+      
     };
   
     // AGENT SOCKET

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Markdown from 'react-markdown'
 import CollapsedList from "../CollapsedList/CollapsedList";
 
 export interface NerDTO {
@@ -112,7 +112,7 @@ const ProductRecommendations = () => {
 
               {responseRef.current ? (
                 <>
-                  <ReactMarkdown>{formattedMarkdown}</ReactMarkdown>
+                  <Markdown>{formattedMarkdown}</Markdown>
                   <CollapsedList items={history} setItems={setHistory} />
                 </>
               ) : (

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
+// import ReactMarkdown from "react-markdown";
 
 interface CollapsedListProps {
   items: { text: string; title: string | undefined }[];
@@ -83,7 +83,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
                 {`${item.title || idx + 1}`}
               </summary>
               <div className="px-4 py-2 bg-white text-gray-800 max-h-[300px] overflow-y-auto">
-                <ReactMarkdown>{formattedMarkdown}</ReactMarkdown>
+                {formattedMarkdown}
               </div>
             </details>
           );

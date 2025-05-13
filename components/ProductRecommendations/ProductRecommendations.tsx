@@ -112,7 +112,7 @@ const ProductRecommendations = () => {
 
               {responseRef.current ? (
                 <>
-                  <Markdown>{formattedMarkdown}</Markdown>
+                  {formattedMarkdown}
                   <CollapsedList items={history} setItems={setHistory} />
                 </>
               ) : (

@@ -13,7 +13,7 @@ export interface NerDTO {
 }
 const id = "Mahmoud"
 const ProductRecommendations = () => {
-    const WS_URL = "ws://4.227.187.182:5002";
+    const WS_URL = "wss://4.227.187.182:5002";
       
       const wsRef = useRef<WebSocket | null>(null);
       const responseRef = useRef("");

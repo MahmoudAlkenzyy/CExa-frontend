@@ -257,9 +257,9 @@ const AudioRecorderPage = () => {
   //   console.log(transcription);
 const id = "Mahmoud"
   // WebSocket URLs
-  const AUDIO_WS_URL = "ws://4.227.187.182:5000";
-  const TEXT_WS_URL = "ws://4.227.187.182:5001";
-  const AGENT_URL = "ws://4.227.187.182:5003";
+  const AUDIO_WS_URL = "wss://4.227.187.182:5000";
+  const TEXT_WS_URL = "wss://4.227.187.182:5001";
+  const AGENT_URL = "wss://4.227.187.182:5003";
 
   // Audio configuration (matches Python settings)
   const CHUNK_SIZE = 256;

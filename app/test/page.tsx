@@ -315,7 +315,7 @@ const id = generateUniqueId()
     // Send initial IDs once sockets are open
     const sendInitData = (socket: WebSocket) => {
       socket.onopen = () => {
-        socket.send(JSON.stringify({ id }));
+        socket.send( id );
       };
     };
   

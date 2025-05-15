@@ -34,6 +34,8 @@ const MoodeRecomendtion: React.FC = () => {
     const results = (await client.analyzeSentiment(documents)) as SpeachData[];
     // console.log({ sentiment: results[0] });
     // console.log(results, "ssssss");
+    console.log({results});
+    
     setSentiment(results[0].sentiment);
     updatData(results[0]);
     // console.log({ SpeachData: results[0] });

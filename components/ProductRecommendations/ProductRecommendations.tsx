@@ -4,7 +4,7 @@ import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
 import CollapsedList from "../CollapsedList/CollapsedList";
 import { RandomId } from "../../constant";
-
+import Markdown from 'markdown-to-jsx';
 export interface NerDTO {
   text: string;
   category: string;
@@ -114,7 +114,9 @@ const ProductRecommendations = () => {
 
               {responseRef.current ? (
                 <>
+                <Markdown>
                   {formattedMarkdown}
+                </Markdown>
                   <CollapsedList items={history} setItems={setHistory} />
                 </>
               ) : (

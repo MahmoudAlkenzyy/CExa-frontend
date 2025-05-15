@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
 import CollapsedList from "../CollapsedList/CollapsedList";
+import { RandomId } from "../../constant";
 
 export interface NerDTO {
   text: string;
@@ -11,13 +12,8 @@ export interface NerDTO {
   length: number;
   confidenceScore: number;
 }
-function generateUniqueId() {
-  const timestamp = Date.now(); // milliseconds since Jan 1, 1970
-  const random = Math.floor(Math.random() * 1e6); // random 6-digit number
-  return `id-${timestamp}-${random}`;
-}
-const id = generateUniqueId()
-console.log(id);
+
+
 
 const ProductRecommendations = () => {
     const WS_URL = "wss://4.227.187.182:5002";
@@ -31,7 +27,7 @@ const ProductRecommendations = () => {
       useEffect(() => {
           const sendInitData = (socket: WebSocket) => {
               socket.onopen = () => {
-                socket.send( id );
+                socket.send( RandomId );
               };
             };
           // 1) Open connection

@@ -11,7 +11,12 @@ export interface NerDTO {
   length: number;
   confidenceScore: number;
 }
-const id = "Mahmoud"
+function generateUniqueId() {
+  const timestamp = Date.now(); // milliseconds since Jan 1, 1970
+  const random = Math.floor(Math.random() * 1e6); // random 6-digit number
+  return `id-${timestamp}-${random}`;
+}
+const id = generateUniqueId()
 const ProductRecommendations = () => {
     const WS_URL = "wss://4.227.187.182:5002";
       

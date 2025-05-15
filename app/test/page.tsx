@@ -153,6 +153,7 @@ import { FaPhoneSlash } from "react-icons/fa6";
 // };
 
 // export default AudioRecorderPage;
+import { RandomId } from "../../constant";
 
 const AudioRecorderPage = () => {
   //   const [isRecording, setIsRecording] = useState(false);
@@ -255,12 +256,7 @@ const AudioRecorderPage = () => {
   const agentSocket = useRef<WebSocket | null>(null);
   const processorRef = useRef<AudioWorkletNode | null>(null);
   //   console.log(transcription);
-  function generateUniqueId() {
-  const timestamp = Date.now(); // milliseconds since Jan 1, 1970
-  const random = Math.floor(Math.random() * 1e6); // random 6-digit number
-  return `id-${timestamp}-${random}`;
-}
-const id = generateUniqueId()
+  
   // WebSocket URLs
   const AUDIO_WS_URL = "wss://4.227.187.182:5000";
   const TEXT_WS_URL = "wss://4.227.187.182:5001";
@@ -315,7 +311,7 @@ const id = generateUniqueId()
     // Send initial IDs once sockets are open
     const sendInitData = (socket: WebSocket) => {
       socket.onopen = () => {
-        socket.send( id );
+        socket.send( RandomId );
       };
     };
   

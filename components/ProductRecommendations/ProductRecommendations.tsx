@@ -17,6 +17,8 @@ function generateUniqueId() {
   return `id-${timestamp}-${random}`;
 }
 const id = generateUniqueId()
+console.log(id);
+
 const ProductRecommendations = () => {
     const WS_URL = "wss://4.227.187.182:5002";
       
@@ -29,7 +31,7 @@ const ProductRecommendations = () => {
       useEffect(() => {
           const sendInitData = (socket: WebSocket) => {
               socket.onopen = () => {
-                socket.send(JSON.stringify({ id }));
+                socket.send( id );
               };
             };
           // 1) Open connection

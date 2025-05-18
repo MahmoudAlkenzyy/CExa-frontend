@@ -309,15 +309,18 @@ const AudioRecorderPage = () => {
     };
   
     // Send initial IDs once sockets are open
-    const sendInitData = (socket: WebSocket) => {
-      socket.onopen = () => {
-        socket.send( RandomId );
-      };
+    const sendInitData = (socket: WebSocket, data: string): Promise<void> => {
+  return new Promise((resolve) => {
+    socket.onopen = () => {
+      socket.send(data);
+      resolve(); // نكمل بعد ما يبعت الداتا
     };
-  
-    sendInitData(text);
-    sendInitData(agent);
-    sendInitData(audio);
+  });
+};
+  (async () => {
+    sendInitData(text, RandomId);
+    sendInitData(agent, RandomId);
+    sendInitData(audio, RandomId);})();
   
     return () => {
       // Clean up sockets on unmount

@@ -5,11 +5,11 @@ export interface VoiceBottonProps {
   client: string[];
 }
 export interface SpeachData {
-  id: string;
+  
   // warnings: any[];
   sentiment: string;
-  confidenceScores: ConfidenceScores;
-  sentences: Sentence[];
+  confidenceScores: number;
+  
 }
 export interface StateSliderProps {
   moodValue: number;

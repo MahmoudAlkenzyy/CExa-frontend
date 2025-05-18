@@ -1,43 +1,41 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { FaFaceMeh } from "react-icons/fa6";
-import {
-  TextAnalyticsClient,
-  AzureKeyCredential,
-} from "@azure/ai-text-analytics";
+// import {
+//   TextAnalyticsClient,
+//   AzureKeyCredential,
+// } from "@azure/ai-text-analytics";
 import { IoMdHappy } from "react-icons/io";
 import { FaRegAngry } from "react-icons/fa";
 
 import useSpeachStore from "../../lib/store";
-import { SpeachData } from "../../types";
+// import { SpeachData } from "../../types";
 import { Card } from "@radix-ui/themes";
 const MoodeRecomendtion: React.FC = () => {
   // const [inputText, setInputText] = useState<string>("");
-  const [sentiment, setSentiment] = useState<string>("neutral");
+//   const [sentiment, setSentiment] = useState<string>("neutral");
 
   const updatData = useSpeachStore((state) => state.updateData);
   const client = useSpeachStore((state) => state.client);
   const sent = client[client.length - 1];
-  const { positivePercent } = useSpeachStore((state) => state);
+  const {  SpeachData} = useSpeachStore((state) => state);
 
   const analyzeSentiment = useCallback(async () => {
-    const endpoint =
-      "https://realtimesentimentanalysis55.cognitiveservices.azure.com";
-    const apiKey = process.env.NEXT_PUBLIC_AZURE_SUBSCRIPTION_SENTMINT_TEXT!;
-    const client = new TextAnalyticsClient(
-      endpoint,
-      new AzureKeyCredential(apiKey)
-    );
+    // const endpoint =
+    //   "https://realtimesentimentanalysis55.cognitiveservices.azure.com";
+    // const apiKey = process.env.NEXT_PUBLIC_AZURE_SUBSCRIPTION_SENTMINT_TEXT!;
+    // const client = new TextAnalyticsClient(
+    //   endpoint, 
+    //   new AzureKeyCredential(apiKey)
+    // );
 
-    const documents = [sent.message];
-    const results = (await client.analyzeSentiment(documents)) as SpeachData[];
-    // console.log({ sentiment: results[0] });
-    // console.log(results, "ssssss");
-    console.log({results});
+    // const documents = [sent.message];
+    // const results = (await client.analyzeSentiment(documents)) as SpeachData[];
+    // console.log({results});
     
-    setSentiment(results[0].sentiment);
-    updatData(results[0]);
+    // setSentiment(results[0].sentiment);
+    // updatData(results[0]);
     // console.log({ SpeachData: results[0] });
 
     // results.forEach((document) => {
@@ -51,8 +49,48 @@ const MoodeRecomendtion: React.FC = () => {
     //     )}, Negative=${document.confidenceScores.negative.toFixed(2)}`
     //   );
     // });
-  }, [sent, updatData]);
+    
+        try {
+          const lastItemText = sent.message || "";
+        
+          const res = await fetch("https://4.227.187.182:5004/sentiment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+             user_transcription: lastItemText,
+            }),
+          });
+    
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+    
+          const json = await res.json();
+    // console.log({json});
+    updatData({sentiment:json.Sentiment,confidenceScores:json.Confidence});
+          // More defensive update
+        //   setItems((prev) => {
+        //     if (prev.length === 0) return prev; // Handle case where items were cleared
+    
+        //     return prev.map((item, index) =>
+        //       index === prev.length - 1
+        //         ? { ...item, title: json.title || json.summary || json.response }
+        //         : item
+        //     );
+        //   });
+    
+        //   console.log("Title updated successfully:", json);
+        } catch (error) {
+          console.error("Error fetching title:", error);
+          // Optional: Set error state or show user notification
+        }
+     
+    
+  }, [sent]);
   useEffect(() => {
+
     if (sent && sent.isclient) analyzeSentiment();
   }, [sent, analyzeSentiment]);
   // console.log({ sent });
@@ -60,10 +98,10 @@ const MoodeRecomendtion: React.FC = () => {
 
 //   if (sentiment == "positive") {
 //     // الشعور الإيجابي أعلى بكثير
-//     if (positivePercent <= 25) {
+//     if ( <= 25) {
 //       message =
 //         "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك.";
-//     } else if (positivePercent <= 50) {
+//     } else if ( <= 50) {
 //       message =
 //         "نقدّر ملاحظاتك ونأسف لأي إزعاج. نعمل دائمًا على تحسين خدماتنا، وسنسعى لمعالجة أي مشكلات تواجهها لضمان رضاك.";
 //     } else {
@@ -87,7 +125,7 @@ const MoodeRecomendtion: React.FC = () => {
 //     message = " اقدر اساعدك ازاي ";
 //   }
   // console.log({ message });
-
+console.log({SpeachData})
   return (
     <div dir="rtl" className=" h-full ">
       {/* <MyStateSlider /> */}
@@ -98,15 +136,15 @@ const MoodeRecomendtion: React.FC = () => {
             <p
               className={`
 
-               ${sentiment == "negative" && "text-red-600"} 
-               ${sentiment == "positive" && "text-green-600"} 
-               ${sentiment == "neutral" && "text-yellow-600"} 
+               ${SpeachData.sentiment == "negative" && "text-red-600"} 
+               ${SpeachData.sentiment == "positive" && "text-green-600"} 
+               ${SpeachData.sentiment == "neutral" && "text-yellow-600"} 
               flex items-center gap-1 `}
             >
-              {sentiment == "positive" && <IoMdHappy size={16} />}
-              {sentiment == "neutral" && <FaFaceMeh size={16} />}
-              {sentiment == "negative" && <FaRegAngry size={16} />}
-              {sentiment}
+              {SpeachData.sentiment == "positive" && <IoMdHappy size={16} />}
+              {SpeachData.sentiment == "neutral" && <FaFaceMeh size={16} />}
+              {SpeachData.sentiment == "negative" && <FaRegAngry size={16} />}
+              {SpeachData.sentiment}
             </p>
           </h2>
           {/* <div
@@ -119,22 +157,22 @@ const MoodeRecomendtion: React.FC = () => {
         
           </div> */}
           <p className=" h-[30%] min-h-10    ">
-            {sentiment == "positive" &&
-              positivePercent <= 25 &&
+            {SpeachData.sentiment == "positive" &&
+              SpeachData.confidenceScores <= 25 &&
               "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك."}
-            {sentiment == "positive" &&
-              positivePercent > 25 &&
-              positivePercent <= 50 &&
+            {SpeachData.sentiment == "positive" &&
+              SpeachData.confidenceScores > 25 &&
+              SpeachData.confidenceScores <= 50 &&
               "نقدّر ملاحظاتك ونأسف لأي إزعاج. نعمل دائمًا على تحسين خدماتنا، وسنسعى لمعالجة أي مشكلات تواجهها لضمان رضاك."}
-            {sentiment == "positive" &&
-              positivePercent > 50 &&
-              positivePercent <= 75 &&
+            {SpeachData.sentiment == "positive" &&
+              SpeachData.confidenceScores > 50 &&
+              SpeachData.confidenceScores <= 75 &&
               "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك."}
-            {sentiment == "positive" &&
-              positivePercent < 75 &&
+            {SpeachData.sentiment == "positive" &&
+              SpeachData.confidenceScores < 75 &&
               "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك."}
-            {sentiment == "neutral" && " اقدر اساعدك ازاي "}
-            {sentiment == "negative" &&
+            {SpeachData.sentiment == "neutral" && " اقدر اساعدك ازاي "}
+            {SpeachData.sentiment == "negative" &&
               "نا متفهم تمامًا استياء حضرتك وبنعتذر عن أي مشكلة حصلت، وأوعدك إننا هنتعامل مع الموضوع فورًا لضمان رضاك الكامل إحنا هنا عشان نتأكد إن المشكلة تتحل بشكل يرضيك تمامًا"}
 
             {}

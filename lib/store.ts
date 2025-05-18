@@ -4,9 +4,10 @@ import { SpeachData } from "../types";
 // Define the state and actions types
 interface SpeachState {
   SpeachData: SpeachData; // البيانات الأصلية
-  positivePercent: number;
-  neutralPercent: number;
-  negativePercent: number;
+//   positivePercent: number;
+//   neutralPercent: number;
+    //   negativePercent: number;
+    
   moodLabel: string;
   background: string;
   markerPosition: number;
@@ -34,10 +35,10 @@ interface SpeachState {
 // Create the store
 const useSpeachStore = create<SpeachState>((set) => ({
   SpeachData: {
-    confidenceScores: { negative: 0, neutral: 0, positive: 0 },
-    id: "",
+    confidenceScores: 0,
+    
     sentiment: "neutral",
-    sentences: [],
+    
   },
   positivePercent: 0,
   neutralPercent: 0,
@@ -57,41 +58,35 @@ const useSpeachStore = create<SpeachState>((set) => ({
   },
 
   updateData: (data) => {
-    const positivePercent = Math.round(data.confidenceScores.positive * 100);
-    const neutralPercent = Math.round(data.confidenceScores.neutral * 100);
-    const negativePercent = Math.round(data.confidenceScores.negative * 100);
-
-    const maxValue = Math.max(positivePercent, neutralPercent, negativePercent);
-    const filledBars = Math.ceil((maxValue / 100) * 10);
+    const confidenceScores = data.confidenceScores;
+const sentiment = data.sentiment;
+    // const maxValue = Math.max(positivePercent, neutralPercent, negativePercent);
+    // const filledBars = Math.ceil((maxValue / 100) * 10);
 
     let moodLabel = "عادي";
     let background = "#FACC15";
-    let markerPosition = 49;
+    // let markerPosition = 49;
 
-    if (maxValue === positivePercent) {
+    if (sentiment === "positive") {
       moodLabel = "سعيد";
       background = "#4ADE80";
-      markerPosition = 43 - (positivePercent / 100) * 45;
-    } else if (maxValue === neutralPercent) {
+    //   markerPosition = 43 - (positivePercent / 100) * 45;
+    } else if (sentiment === "neutral") {
       moodLabel = "عادي";
       background = "#FACC15";
-      markerPosition = 49;
-    } else if (maxValue === negativePercent) {
+    //   markerPosition = 49;
+    } else if (sentiment === "negative") {
       moodLabel = "حزين";
       background = "#EA384C";
-      markerPosition = (negativePercent / 100) * 45 + 50;
+    //   markerPosition = (negativePercent / 100) * 45 + 50;
     }
 
     set({
-      SpeachData: data,
-      positivePercent,
-      neutralPercent,
-      negativePercent,
+      SpeachData: {confidenceScores,sentiment},
+     
       moodLabel,
       background,
-      markerPosition,
-      maxValue,
-      filledBars,
+     
     });
   },
 

@@ -4,7 +4,7 @@ import { PiWaveform } from "react-icons/pi";
 import { FaFaceLaugh, FaFaceMeh } from "react-icons/fa6";
 const ModeState = () => {
   const {
-    maxValue,
+    SpeachData,
     // positivePercent,
     // neutralPercent,
     // negativePercent,
@@ -23,7 +23,7 @@ const ModeState = () => {
           ) : (
             <FaFaceMeh style={{ color: background }} size={35} />
           )}
-          <span className="text-lg font-medium text-gray-800">{maxValue}%</span>
+          <span className="text-lg font-medium text-gray-800">{SpeachData.confidenceScores}%</span>
         </div>
 
         <PiWaveform

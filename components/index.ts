@@ -4,7 +4,7 @@ import MoodeRecomendtion from "./MoodeRecomendtion/MoodeRecomendtion";
 import { VoiceButton } from "./VoiceButton/VoiceButton";
 import MainRightSidebar from "./MainRightSidebar/MainRightSidebar";
 import ChatBox from "./ChatBox/ChatBox";
-import StateSlider from "./StateSlider/StateSlider";
+// import StateSlider from "./StateSlider/StateSlider";
 import MoodSlider from "./MoodSlider/MoodSlider";
 // import MyStateSlider from "./MyStateSlider/MyStateSlider";
 import MyDialog from "./Dialog/Dialog";
@@ -21,7 +21,7 @@ export {
   VoiceButton,
   MainRightSidebar,
   ChatBox,
-  StateSlider,
+//   StateSlider,
   MoodSlider,
 //   MyStateSlider,
   MyDialog,

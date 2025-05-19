@@ -6,7 +6,7 @@ import MainRightSidebar from "./MainRightSidebar/MainRightSidebar";
 import ChatBox from "./ChatBox/ChatBox";
 import StateSlider from "./StateSlider/StateSlider";
 import MoodSlider from "./MoodSlider/MoodSlider";
-import MyStateSlider from "./MyStateSlider/MyStateSlider";
+// import MyStateSlider from "./MyStateSlider/MyStateSlider";
 import MyDialog from "./Dialog/Dialog";
 import AudioRecorderPage from "../app/test/page";
 import Sidebar from "./Sidebar/Sidebar";
@@ -23,7 +23,7 @@ export {
   ChatBox,
   StateSlider,
   MoodSlider,
-  MyStateSlider,
+//   MyStateSlider,
   MyDialog,
   AudioRecorderPage,
   Sidebar,

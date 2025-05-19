@@ -88,7 +88,7 @@ const MoodeRecomendtion: React.FC = () => {
         }
      
     
-  }, [sent]);
+  }, [sent,updatData]);
   useEffect(() => {
 
     if (sent && sent.isclient) analyzeSentiment();

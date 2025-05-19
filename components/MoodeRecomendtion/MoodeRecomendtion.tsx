@@ -52,7 +52,6 @@ const MoodeRecomendtion: React.FC = () => {
     
         try {
           const lastItemText = sent.message || "";
-        console.log("teeest11");
         
         const res = await fetch("https://4.227.187.182:5004/sentiment", {
             method: "POST",
@@ -63,16 +62,13 @@ const MoodeRecomendtion: React.FC = () => {
                 user_transcription: lastItemText,
             }),
         });
-        console.log("teeest22");
         
         if (!res.ok) {
-            console.log("teeest33");
             throw new Error(`HTTP error! status: ${res.status}`);
         }
-        console.log("teeest44");
         
         const json = await res.json();
-        console.log("teeest55");
+        console.log({json});
     // console.log({json});
     updatData({sentiment:json.Sentiment,confidenceScores:json.Confidence});
           // More defensive update

@@ -68,7 +68,8 @@ const MoodeRecomendtion: React.FC = () => {
         const json = await res.json();
         console.log({json});
     // console.log({json});
-    updatData({sentiment:json.Sentiment,confidenceScores:json.Confidence});
+            updatData({ sentiment: json.Sentiment, confidenceScores: json.Confidence });
+            
           // More defensive update
         //   setItems((prev) => {
         //     if (prev.length === 0) return prev; // Handle case where items were cleared

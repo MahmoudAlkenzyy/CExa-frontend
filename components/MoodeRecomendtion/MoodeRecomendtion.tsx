@@ -63,9 +63,7 @@ const MoodeRecomendtion: React.FC = () => {
             }),
         });
         
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        
         
         const json = await res.json();
         console.log({json});

@@ -11,7 +11,10 @@ const ModeState = () => {
     // markerPosition,
     moodLabel,
     background,
-  } = useSpeachStore((state) => state);
+    } = useSpeachStore((state) => state);
+    console.log("moodLabel", moodLabel);
+  console.log("background", background);
+    
   return (
     <div className="bg-[#C4C4C459] rounded-xl shadow-sm">
       <div className="flex justify-center items-center gap-6 py-3 rounded-t-xl">

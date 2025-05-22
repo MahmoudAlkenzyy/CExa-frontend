@@ -60,7 +60,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
         );
       });
 
-      console.log("Title updated successfully:", json);
+    //   console.log("Title updated successfully:", json);
     } catch (error) {
       console.error("Error fetching title:", error);
       // Optional: Set error state or show user notification
@@ -69,7 +69,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
 
   useEffect(() => {
     fetchTitle();
-    console.log("res2");
+    // console.log("res2");
   }, [fetchTitle]);
   return (
     <div className="space-y-3 my-4">

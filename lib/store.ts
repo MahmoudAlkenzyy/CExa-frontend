@@ -67,15 +67,16 @@ const sentiment = data.sentiment;
     let background = "#FACC15";
     // let markerPosition = 49;
 
-    if (sentiment === "positive") {
-      moodLabel = "سعيد";
-      background = "#4ADE80";
-    //   markerPosition = 43 - (positivePercent / 100) * 45;
-    } else if (sentiment === "neutral") {
-      moodLabel = "عادي";
-      background = "#FACC15";
-    //   markerPosition = 49;
-    } else if (sentiment === "negative") {
+    if (sentiment === "Positive") {
+        
+        moodLabel = "سعيد";
+        background = "#4ADE80";
+        //   markerPosition = 43 - (positivePercent / 100) * 45;
+    } else if (sentiment === "Neutral") {
+        moodLabel = "عادي";
+        background = "#FACC15";
+        //   markerPosition = 49;
+    } else if (sentiment === "Negative") {
       moodLabel = "حزين";
       background = "#EA384C";
     //   markerPosition = (negativePercent / 100) * 45 + 50;

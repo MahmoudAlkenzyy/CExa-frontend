@@ -71,6 +71,8 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
     fetchTitle();
     // console.log("res2");
   }, [fetchTitle]);
+  console.log(items,items.slice(0,-1));
+  
   return (
     <div className="space-y-3 my-4">
       {items

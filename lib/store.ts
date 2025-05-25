@@ -37,7 +37,8 @@ const useSpeachStore = create<SpeachState>((set) => ({
   SpeachData: {
     confidenceScores: 0,
     
-    sentiment: "neutral",
+        sentiment: "neutral",
+    moodRecomendtion: "",
     
   },
   positivePercent: 0,
@@ -48,7 +49,8 @@ const useSpeachStore = create<SpeachState>((set) => ({
   markerPosition: 49,
   maxValue: 0,
   filledBars: 0,
-  client: [],
+    client: [],
+  moodeRecomendtion:"",
   sum: {
     point1: "",
     point2: "",
@@ -59,7 +61,8 @@ const useSpeachStore = create<SpeachState>((set) => ({
 
   updateData: (data) => {
     const confidenceScores = data.confidenceScores;
-const sentiment = data.sentiment;
+      const sentiment = data.sentiment;
+      const moodRecomendtion = data.moodRecomendtion ;
     // const maxValue = Math.max(positivePercent, neutralPercent, negativePercent);
     // const filledBars = Math.ceil((maxValue / 100) * 10);
 
@@ -83,7 +86,7 @@ const sentiment = data.sentiment;
     }
 
     set({
-      SpeachData: {confidenceScores,sentiment},
+      SpeachData: {confidenceScores,sentiment,moodRecomendtion},
      
       moodLabel,
       background,

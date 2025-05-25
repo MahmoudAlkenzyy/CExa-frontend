@@ -68,7 +68,7 @@ const MoodeRecomendtion: React.FC = () => {
         const json = await res.json();
         console.log({json});
     // console.log({json});
-            updatData({ sentiment: json.Sentiment, confidenceScores: json.Confidence });
+            updatData({ sentiment: json.Sentiment, confidenceScores: json.Confidence,moodRecomendtion: json.Recommendation });
             
           // More defensive update
         //   setItems((prev) => {
@@ -157,25 +157,7 @@ console.log({SpeachData})
         
           </div> */}
           <p className=" h-[30%] min-h-10    ">
-            {SpeachData.sentiment == "positive" &&
-              SpeachData.confidenceScores <= 25 &&
-              "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك."}
-            {SpeachData.sentiment == "positive" &&
-              SpeachData.confidenceScores > 25 &&
-              SpeachData.confidenceScores <= 50 &&
-              "نقدّر ملاحظاتك ونأسف لأي إزعاج. نعمل دائمًا على تحسين خدماتنا، وسنسعى لمعالجة أي مشكلات تواجهها لضمان رضاك."}
-            {SpeachData.sentiment == "positive" &&
-              SpeachData.confidenceScores > 50 &&
-              SpeachData.confidenceScores <= 75 &&
-              "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك."}
-            {SpeachData.sentiment == "positive" &&
-              SpeachData.confidenceScores < 75 &&
-              "نأسف جدًا لأن تجربتك لم تكن بالمستوى المطلوب. نود أن نفهم أكثر ما حدث لنتمكن من تحسين خدمتنا وتقديم الحل المناسب لك."}
-            {SpeachData.sentiment == "neutral" && " اقدر اساعدك ازاي "}
-            {SpeachData.sentiment == "negative" &&
-              "نا متفهم تمامًا استياء حضرتك وبنعتذر عن أي مشكلة حصلت، وأوعدك إننا هنتعامل مع الموضوع فورًا لضمان رضاك الكامل إحنا هنا عشان نتأكد إن المشكلة تتحل بشكل يرضيك تمامًا"}
-
-            {}
+            {SpeachData.moodRecomendtion || "لا توجد توصيات متاحة في الوقت الحالي."}
           </p>
         </div>
       </Card>

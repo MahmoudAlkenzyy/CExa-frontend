@@ -9,6 +9,7 @@ export interface SpeachData {
   // warnings: any[];
   sentiment: string;
   confidenceScores: number;
+  moodRecomendtion: string;
   
 }
 export interface StateSliderProps {

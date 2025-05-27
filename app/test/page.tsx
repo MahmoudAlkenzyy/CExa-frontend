@@ -258,9 +258,9 @@ const AudioRecorderPage = () => {
   //   console.log(transcription);
   
   // WebSocket URLs
-  const AUDIO_WS_URL = "wss://4.227.187.182:5000";
-  const TEXT_WS_URL = "wss://4.227.187.182:5001";
-  const AGENT_URL = "wss://4.227.187.182:5003";
+  const AUDIO_WS_URL = "https://cexa.eastus.cloudapp.azure.com:5000";
+  const TEXT_WS_URL = "https://cexa.eastus.cloudapp.azure.com:5001";
+  const AGENT_URL = "https://cexa.eastus.cloudapp.azure.com:5003";
 
   // Audio configuration (matches Python settings)
   const CHUNK_SIZE = 256;

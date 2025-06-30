@@ -4,7 +4,6 @@ import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
 import CollapsedList from "../CollapsedList/CollapsedList";
 import { RandomId } from "../../constant";
-import Markdown from "markdown-to-jsx";
 import ProductTextRenderer from "./../TextFromServer/TextFromServer";
 export interface NerDTO {
   text: string;

@@ -4,7 +4,8 @@ import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
 import CollapsedList from "../CollapsedList/CollapsedList";
 import { RandomId } from "../../constant";
-import Markdown from 'markdown-to-jsx';
+import Markdown from "markdown-to-jsx";
+import ProductTextRenderer from "./../TextFromServer/TextFromServer";
 export interface NerDTO {
   text: string;
   category: string;
@@ -13,33 +14,31 @@ export interface NerDTO {
   confidenceScore: number;
 }
 
-
-
 const ProductRecommendations = () => {
-    const WS_URL = "https://cexa.eastus.cloudapp.azure.com:5002";
-      
-      const wsRef = useRef<WebSocket | null>(null);
-      const responseRef = useRef("");
-      const [history, setHistory] = useState<
-      { text: string; title: string | undefined }[]
-      >([]);
-      //   const [isDone, setIsDone] = useState(false);
-      useEffect(() => {
-          const sendInitData = (socket: WebSocket) => {
-              socket.onopen = () => {
-                socket.send( RandomId );
-              };
-            };
-          // 1) Open connection
-          const ws = new WebSocket(WS_URL);
-          wsRef.current = ws;
-          
-          ws.onopen = () => {
-              console.log(`🟢 Connected to ${WS_URL}`);
-            };
-            
-            ws.onmessage = (event) => {
-                const msg = event.data as string;
+  const WS_URL = "https://cexa.eastus.cloudapp.azure.com:5002";
+
+  const wsRef = useRef<WebSocket | null>(null);
+  const responseRef = useRef("");
+  const [history, setHistory] = useState<
+    { text: string; title: string | undefined }[]
+  >([]);
+  //   const [isDone, setIsDone] = useState(false);
+  useEffect(() => {
+    const sendInitData = (socket: WebSocket) => {
+      socket.onopen = () => {
+        socket.send(RandomId);
+      };
+    };
+    // 1) Open connection
+    const ws = new WebSocket(WS_URL);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log(`🟢 Connected to ${WS_URL}`);
+    };
+
+    ws.onmessage = (event) => {
+      const msg = event.data as string;
 
       // 1) Ignore these
       if (msg === "This is not relevant") {
@@ -52,25 +51,25 @@ const ProductRecommendations = () => {
 
       // 2) End marker — push to history, then clear
       if (msg === "End Here!!") {
-          setHistory((prev) => [
-              ...prev,
-              { text: responseRef.current, title: undefined },
-            ]);
-            // setResponse("");
-            return;
-        }
-        
-        // 3) Start marker — just clear buffer
-        if (msg === "Start Here!!") {
+        setHistory((prev) => [
+          ...prev,
+          { text: responseRef.current, title: undefined },
+        ]);
+        // setResponse("");
+        return;
+      }
+
+      // 3) Start marker — just clear buffer
+      if (msg === "Start Here!!") {
         responseRef.current = "";
         return;
       }
       //   console.log(responseRef.current);
-      
+
       // 4) Otherwise accumulate
       responseRef.current += msg;
     };
-    
+
     ws.onerror = (err) => {
       console.error("⚠️ WebSocket error:", err);
     };
@@ -114,9 +113,9 @@ const ProductRecommendations = () => {
 
               {responseRef.current ? (
                 <>
-                <Markdown>
+                  <ProductTextRenderer apiText={formattedMarkdown} />
                   {formattedMarkdown}
-                </Markdown>
+
                   <CollapsedList items={history} setItems={setHistory} />
                 </>
               ) : (

@@ -17,7 +17,7 @@ function renderTextWithImages(text: string) {
           key={index}
           src={part}
           alt="Product"
-          className="inline-block max-w-[150px] mx-2 my-2 rounded shadow"
+          className="inline-block  max-w-[150px] mx-2 my-2 rounded shadow"
           /> 
           <br/>
           </>
@@ -30,7 +30,7 @@ function renderTextWithImages(text: string) {
 
 export default function ProductTextRenderer({ apiText }: { apiText: string }) {
   return (
-    <div className="p-4 text-right leading-8 text-gray-800">
+    <div className="p-4 text-left leading-8 text-gray-800">
       {renderTextWithImages(apiText)}
     </div>
   );

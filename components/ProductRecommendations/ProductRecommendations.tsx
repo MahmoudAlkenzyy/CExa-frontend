@@ -113,7 +113,7 @@ const ProductRecommendations = () => {
               {responseRef.current ? (
                 <>
                   <ProductTextRenderer apiText={formattedMarkdown} />
-                  {formattedMarkdown}
+                  
 
                   <CollapsedList items={history} setItems={setHistory} />
                 </>

@@ -112,6 +112,7 @@ const ProductRecommendations = () => {
 
               {responseRef.current ? (
                 <>
+                {/* <MarkDown></Markdown> */}
                   <ProductTextRenderer apiText={formattedMarkdown} />
                   
 

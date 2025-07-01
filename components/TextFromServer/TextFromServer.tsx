@@ -2,35 +2,81 @@
 
 import React from "react";
 
+export function renderTextWithImages(text: string) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const imageExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"];
 
-function renderTextWithImages(text: string) {
-  const imageRegex = /(https?:\/\/[^\s]+)/g;
+  // فقرة فقرة (سطر سطر)
+  const paragraphs = text.split(/\n+/).filter(Boolean);
 
-  const parts = text.split(imageRegex);
+  return paragraphs.map((para, index) => {
+    const parts = para.split(urlRegex);
 
-  return parts.map((part, index) => {
-    if (part.match(imageRegex)) {
-      return (
-        <>
-        <br/>
-        <img
-          key={index}
-          src={part}
-          alt="Product"
-          className="inline-block  max-w-[150px] mx-2 my-2 rounded shadow"
-          /> 
-          <br/>
-          </>
-      );
-    } else {
-      return <span key={index}>{part}</span>;
-    }
+    const formattedParts = parts.map((part, i) => {
+      const lower = part.toLowerCase();
+      const isImage = imageExtensions.some((ext) => lower.endsWith(ext));
+
+      if (part.match(urlRegex) && isImage) {
+        return (
+          <React.Fragment key={i}>
+            <img
+              src={part}
+              alt="Product"
+              className="inline-block max-w-[150px] mx-2 my-2 rounded shadow"
+            />
+          </React.Fragment>
+        );
+      } else if (part.match(urlRegex)) {
+        return (
+          <a
+            key={i}
+            href={part}
+            className="text-blue-600 underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {part}
+          </a>
+        );
+      }
+
+      // bold **text**
+      const boldRegex = /\*\*(.*?)\*\*/g;
+      const boldParts = [];
+      let lastIndex = 0;
+      let match;
+      while ((match = boldRegex.exec(part)) !== null) {
+        boldParts.push(part.substring(lastIndex, match.index));
+        boldParts.push(
+          <strong key={`${i}-${match.index}`} className="font-semibold text-gray-800">
+            {match[1]}
+          </strong>
+        );
+        lastIndex = match.index + match[0].length;
+      }
+      boldParts.push(part.substring(lastIndex));
+
+      return <React.Fragment key={i}>{boldParts}</React.Fragment>;
+    });
+
+    // Check for bullet point
+    const isBullet = para.trim().startsWith("-");
+
+    return (
+      <div key={index} className="mb-2">
+        {isBullet ? (
+          <li className="list-disc list-inside text-gray-800">{formattedParts}</li>
+        ) : (
+          <p className="text-gray-800">{formattedParts}</p>
+        )}
+      </div>
+    );
   });
 }
 
 export default function ProductTextRenderer({ apiText }: { apiText: string }) {
   return (
-    <div className="p-4 text-left leading-8 text-gray-800">
+    <div className="p-4 leading-8 text-right whitespace-pre-wrap">
       {renderTextWithImages(apiText)}
     </div>
   );

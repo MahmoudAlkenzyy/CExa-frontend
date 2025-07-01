@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 // import ReactMarkdown from "react-markdown";
-import Markdown from 'markdown-to-jsx';
+// import Markdown from "markdown-to-jsx";
+import ProductTextRenderer from "../TextFromServer/TextFromServer";
 
 interface CollapsedListProps {
   items: { text: string; title: string | undefined }[];
@@ -15,7 +16,7 @@ interface CollapsedListProps {
 }
 
 export default function CollapsedList({ items, setItems }: CollapsedListProps) {
-  console.log({ items1:items.reverse() });
+  console.log({ items1: items.reverse() });
   const formatToMarkdown = (text: string) => {
     return text
       .replace("ما يلي:", "ما يلي:\n") // إضافة سطر جديد بعد المقدمة
@@ -33,15 +34,18 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
     try {
       const lastItemText = items[items.length - 1].text || "";
       if (items[items.length - 1].title) return;
-      const res = await fetch("https://cexa.eastus.cloudapp.azure.com:5004/summary", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model_response: lastItemText,
-        }),
-      });
+      const res = await fetch(
+        "https://cexa.eastus.cloudapp.azure.com:5004/summary",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model_response: lastItemText,
+          }),
+        }
+      );
 
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -60,7 +64,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
         );
       });
 
-    //   console.log("Title updated successfully:", json);
+      //   console.log("Title updated successfully:", json);
     } catch (error) {
       console.error("Error fetching title:", error);
       // Optional: Set error state or show user notification
@@ -71,13 +75,13 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
     fetchTitle();
     // console.log("res2");
   }, [fetchTitle]);
-  console.log(items,items.slice(0,-1));
-  
+  console.log(items, items.slice(0, -1));
+
   return (
     <div className="space-y-3 my-4">
       {items
-        .slice(0,-1)
-        
+        .slice(0, -1)
+
         .map((item, idx) => {
           const formattedMarkdown = formatToMarkdown(item.text);
           return (
@@ -86,9 +90,10 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
                 {`${item.title || idx + 1}`}
               </summary>
               <div className="px-4 py-2 bg-white text-gray-800 max-h-[300px] overflow-y-auto">
-                <Markdown> 
-                    {formattedMarkdown}
-                    </Markdown>
+                {/* <Markdown>  */}
+                <ProductTextRenderer apiText={formattedMarkdown} />
+                {/* {formattedMarkdown} */}
+                {/* </Markdown> */}
               </div>
             </details>
           );

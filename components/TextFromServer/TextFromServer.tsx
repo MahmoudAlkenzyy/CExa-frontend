@@ -76,7 +76,7 @@ export function renderTextWithImages(text: string) {
 
 export default function ProductTextRenderer({ apiText }: { apiText: string }) {
   return (
-    <div className="p-4 leading-8 text-right whitespace-pre-wrap">
+    <div className="p-4 leading-8 text-left whitespace-pre-wrap">
       {renderTextWithImages(apiText)}
     </div>
   );

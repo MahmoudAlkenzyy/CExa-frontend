@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 // import ReactMarkdown from "react-markdown";
 // import Markdown from "markdown-to-jsx";
-import  { renderTextWithImages } from "../TextFromServer/TextFromServer";
+import ProductTextRenderer from "../TextFromServer/TextFromServer";
 
 interface CollapsedListProps {
   items: { text: string; title: string | undefined }[];
@@ -81,7 +81,6 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
     <div className="space-y-3 my-4">
       {items.map((item, idx) => {
         const formattedMarkdown = formatToMarkdown(item.text);
-        const finalRes = renderTextWithImages(formattedMarkdown)
         return (
           <details key={idx} className="border rounded-lg overflow-hidden">
             <summary className="cursor-pointer bg-blue-100 px-4 py-2 font-medium">
@@ -89,10 +88,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
             </summary>
             <div className="px-4 py-2 bg-white text-gray-800 max-h-[300px] overflow-y-auto">
               {/* <Markdown> */}
-                
-
-                {finalRes}
-               
+                {<ProductTextRenderer apiText={formattedMarkdown} />}
               {/* </Markdown> */}
             </div>
           </details>

@@ -48,7 +48,10 @@ export function renderTextWithImages(text: string) {
       while ((match = boldRegex.exec(part)) !== null) {
         boldParts.push(part.substring(lastIndex, match.index));
         boldParts.push(
-          <strong key={`${i}-${match.index}`} className="font-semibold text-gray-800">
+          <strong
+            key={`${i}-${match.index}`}
+            className="font-semibold text-gray-800"
+          >
             {match[1]}
           </strong>
         );
@@ -65,7 +68,9 @@ export function renderTextWithImages(text: string) {
     return (
       <div key={index} className="mb-2">
         {isBullet ? (
-          <li className="list-disc list-inside text-gray-800">{formattedParts}</li>
+          <li className="list-disc list-inside text-gray-800">
+            {formattedParts}
+          </li>
         ) : (
           <p className="text-gray-800">{formattedParts}</p>
         )}
@@ -75,9 +80,5 @@ export function renderTextWithImages(text: string) {
 }
 
 export default function ProductTextRenderer({ apiText }: { apiText: string }) {
-  return (
-    <div className="p-4 leading-8 text-left whitespace-pre-wrap">
-      {renderTextWithImages(apiText)}
-    </div>
-  );
+  return <div className="p-4  text-left ">{renderTextWithImages(apiText)}</div>;
 }

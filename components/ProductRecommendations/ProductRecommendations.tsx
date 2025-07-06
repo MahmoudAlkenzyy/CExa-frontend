@@ -86,9 +86,9 @@ const ProductRecommendations = () => {
 
   const formatToMarkdown = (text: string) => {
     return text
-      .replace("ما يلي:", "ما يلي:\n") // إضافة سطر جديد بعد المقدمة
-      .replace(/- (.*?): (.*?)\./g, "- **$1:** $2") // تحويل العناصر إلى Markdown list
-      .replace(/\[doc\d+\]/g, ""); // إزالة أي روابط أو مراجع غير ضرورية
+      .replace("ما يلي:", "ما يلي:\n")
+      .replace(/- (.*?): (.*?)\./g, "- **$1:** $2")
+      .replace(/\[doc\d+\]/g, "");
   };
 
   const formattedMarkdown = formatToMarkdown(responseRef.current);
@@ -112,9 +112,8 @@ const ProductRecommendations = () => {
 
               {responseRef.current ? (
                 <>
-                {/* <MarkDown></Markdown> */}
+                  {/* <MarkDown></Markdown> */}
                   <ProductTextRenderer apiText={formattedMarkdown} />
-                  
 
                   <CollapsedList items={history} setItems={setHistory} />
                 </>

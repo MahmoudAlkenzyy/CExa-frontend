@@ -15,10 +15,8 @@ import {
 export default function Home() {
   return (
     <div className="flex flex-col bg-[#E7EEFF] containerr overflow-hidden">
-      {/* Header */}
-      {/* Main Content */}
+     
       <div className="flex  flex-col containerr min-h-[99dvh]     md:w-full  mx-auto pt-[15px]   gap-2 px-4">
-        {/* First part - Products */}
         <div className="w-full gap-5 h-[40%] flex flex-wrap  ">
           <div className="w-full md:w-[48%] bg-white rounded-xl flex items-center justify-center">
             <CallRating />
@@ -29,7 +27,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* secound part - Products */}
 
         <div className="flex-grow w-full gap-5 flex flex-col md:flex-row ">
           <div className="md:w-[48%] flex flex-col md:flex-row rounded-xl gap-2   ">

@@ -17,29 +17,19 @@ const ProductRecommendations = () => {
   const WS_URL = "https://cexa.eastus.cloudapp.azure.com:5002";
 
   const wsRef = useRef<WebSocket | null>(null);
+  const [response, setResponse] = useState("");
   const responseRef = useRef("");
   const [history, setHistory] = useState<
     { text: string; title: string | undefined }[]
   >([]);
   //   const [isDone, setIsDone] = useState(false);
-  useEffect(() => {
-    const sendInitData = (socket: WebSocket) => {
-      socket.onopen = () => {
-        socket.send(RandomId);
-      };
-    };
-    // 1) Open connection
-    const ws = new WebSocket(WS_URL);
-    wsRef.current = ws;
 
-    ws.onopen = () => {
-      console.log(`🟢 Connected to ${WS_URL}`);
-    };
-
-    ws.onmessage = (event) => {
+  {
+    /**
+        
+        {
       const msg = event.data as string;
 
-      // 1) Ignore these
       if (msg === "This is not relevant") {
         return;
       }
@@ -68,6 +58,50 @@ const ProductRecommendations = () => {
       // 4) Otherwise accumulate
       responseRef.current += msg;
     };
+        */
+  }
+  useEffect(() => {
+    const sendInitData = (socket: WebSocket) => {
+      socket.onopen = () => {
+        socket.send(RandomId);
+      };
+    };
+    // 1) Open connection
+    const ws = new WebSocket(WS_URL);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log(`🟢 Connected to ${WS_URL}`);
+    };
+    ws.onmessage = (event) => {
+      const msg = event.data as string;
+
+      if (msg === "This is not relevant") {
+        responseRef.current = "هذا ليس من منتجاتنا";
+        return;
+      }
+      if (msg === "This is not from our products") {
+        setResponse("هذا ليس من منتجاتنا");
+        return;
+      }
+
+      if (msg === "Start Here!!") {
+        setResponse(""); // clear response
+        return;
+      }
+
+      if (msg === "End Here!!") {
+        setHistory((prev) => [
+          ...prev,
+          { text: responseRef.current, title: undefined },
+        ]);
+        return;
+      }
+
+      // Append streamed message
+      responseRef.current += msg;
+      setResponse((prev) => prev + msg);
+    };
 
     ws.onerror = (err) => {
       console.error("⚠️ WebSocket error:", err);
@@ -83,6 +117,7 @@ const ProductRecommendations = () => {
       ws.close();
     };
   }, []);
+  //   console.log(response);
 
   const formatToMarkdown = (text: string) => {
     return text
@@ -91,7 +126,7 @@ const ProductRecommendations = () => {
       .replace(/\[doc\d+\]/g, "");
   };
 
-  const formattedMarkdown = formatToMarkdown(responseRef.current);
+  const formattedMarkdown = formatToMarkdown(response);
 
   return (
     <div dir="rtl" className="w-full h-full ">
@@ -110,9 +145,9 @@ const ProductRecommendations = () => {
                 className="w-full h-48 object-cover rounded-lg mb-2"
               /> */}
 
-              {responseRef.current ? (
+              {response ? (
                 <>
-                  {/* <MarkDown></Markdown> */}
+                  {/* {response} */}
                   <ProductTextRenderer apiText={formattedMarkdown} />
 
                   <CollapsedList items={history} setItems={setHistory} />

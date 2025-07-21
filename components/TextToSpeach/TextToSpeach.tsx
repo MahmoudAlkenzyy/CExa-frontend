@@ -11,9 +11,16 @@ export default function TextToSpeach() {
 
   useEffect(() => {
     // Initialize AudioContext
-    const AudioContext =
-      window.AudioContext || (window as any).webkitAudioContext;
-    audioContextRef.current = new AudioContext({ sampleRate: 16000 });
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
+
+    if (!AudioContextClass) {
+      throw new Error("Web Audio API is not supported in this browser");
+    }
+
+    audioContextRef.current = new AudioContextClass({ sampleRate: 16000 });
 
     // 1) Open secure WS and ask for blobs
     const ws = new WebSocket(SPEECH_URL);

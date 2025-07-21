@@ -66,7 +66,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
       extractData(data.message);
       //   console.log(data);
 
-      console.log({ data: extractData(data.message) });
+    //   console.log({ data: extractData(data.message) });
     } catch (err) {
       console.log({ err });
     }

@@ -12,8 +12,8 @@ const ModeState = () => {
     moodLabel,
     background,
     } = useSpeachStore((state) => state);
-    console.log("moodLabel", moodLabel);
-  console.log("background", background);
+    // console.log("moodLabel", moodLabel);
+//   console.log("background", background);
     
   return (
     <div className="bg-[#C4C4C459] rounded-xl shadow-sm">

@@ -16,7 +16,7 @@ interface CollapsedListProps {
 }
 
 export default function CollapsedList({ items, setItems }: CollapsedListProps) {
-  console.log({ items1: items.reverse() });
+  //   console.log({ items1: items.reverse() });
   const formatToMarkdown = (text: string) => {
     return text
       .replace("ما يلي:", "ما يلي:\n") // إضافة سطر جديد بعد المقدمة
@@ -75,7 +75,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
     fetchTitle();
     // console.log("res2");
   }, [fetchTitle]);
-  console.log(items, items.slice(0, -1));
+  //   console.log(items, items.slice(0, -1));
 
   return (
     <div className="space-y-3 my-4">
@@ -88,7 +88,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
             </summary>
             <div className="px-4 py-2 bg-white text-gray-800 max-h-[300px] overflow-y-auto">
               {/* <Markdown> */}
-                {<ProductTextRenderer apiText={formattedMarkdown} />}
+              {<ProductTextRenderer apiText={formattedMarkdown} />}
               {/* </Markdown> */}
             </div>
           </details>

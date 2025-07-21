@@ -2,8 +2,7 @@
 
 import useSpeachStore from "@/lib/store";
 import React, { useEffect, useRef } from "react";
-import Markdown from 'markdown-to-jsx';
-
+import Markdown from "markdown-to-jsx";
 
 // import ReactMarkdown from "react-markdown";
 
@@ -29,7 +28,7 @@ const ChatBox: React.FC = () => {
       .replace(/- (.*?): (.*?)\./g, "- **$1:** $2") // تحويل العناصر إلى Markdown list
       .replace(/\[doc\d+\]/g, ""); // إزالة أي روابط أو مراجع غير ضرورية
   };
-console.log({client});
+  // console.log({client});
 
   return (
     <div
@@ -64,10 +63,7 @@ console.log({client});
                     <span className="text-xs ">الوكيل: </span>
                     <span>
                       {/* <ReactMarkdown> */}
-                        <Markdown>
-                            
-                        {formatToMarkdown(mess.message)}
-                        </Markdown>
+                      <Markdown>{formatToMarkdown(mess.message)}</Markdown>
                       {/* </ReactMarkdown> */}
                     </span>
                   </p>

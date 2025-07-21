@@ -28,18 +28,16 @@ const ProductRecommendations = () => {
     const sendInitData = (socket: WebSocket) => {
       socket.onopen = () => {
         socket.send(RandomId);
+        // ws.send("false");
       };
     };
     // 1) Open connection
     const ws = new WebSocket(WS_URL);
     wsRef.current = ws;
 
-    ws.onopen = () => {
-      console.log(`🟢 Connected to ${WS_URL}`);
-    };
-
     ws.onmessage = (event) => {
       const msg = event.data as string;
+      //   console.log({ msg });
 
       if (msg === "This is not relevant") {
         return;
@@ -84,7 +82,7 @@ const ProductRecommendations = () => {
     };
   }, []);
 
-  console.log(responseRef.current);
+  //   console.log(responseRef.current);
 
   const formatToMarkdown = (text: string) => {
     return text

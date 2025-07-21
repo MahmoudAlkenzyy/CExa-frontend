@@ -17,7 +17,7 @@ const ChatComponent = () => {
       });
 
       const data = await res.json();
-      console.log({ data });
+      //   console.log({ data });
 
       // setResponse(data.choices[0]?.message?.content || "لا يوجد رد!");
     } catch (error) {

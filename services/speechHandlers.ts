@@ -5,7 +5,7 @@ export const handleRecognized =
   (setClient: Dispatch<SetStateAction<string[]>>) =>
   (s: sdk.Recognizer, e: sdk.SpeechRecognitionEventArgs) => {
     if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
-      console.log("Recognized:", e);
+      //   console.log("Recognized:", e);
       setClient((prev) => [...prev, e.result.text]);
     } else {
       console.log("Recognition failed:", e.result.reason);

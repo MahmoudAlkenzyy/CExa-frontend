@@ -14,11 +14,13 @@ export default function TextToSpeach() {
 
   useEffect(() => {
     // Initialize AudioContext
-    const AudioContextClass =
-      window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioContextClass) return;
 
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
     // Create isolated context for playback
+    if (!AudioContextClass) return;
     audioContextRef.current = new AudioContextClass({ sampleRate: 24000 });
 
     // Create hidden audio element

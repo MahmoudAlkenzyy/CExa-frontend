@@ -8,19 +8,24 @@ export default function TextToSpeach() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const nextStartTimeRef = useRef(0);
   const isFirstRef = useRef(true);
+  const outputAudioRef = useRef<HTMLAudioElement>(null);
+  const chunkQueueRef = useRef<ArrayBuffer[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Initialize AudioContext
     const AudioContextClass =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext?: typeof AudioContext })
-        .webkitAudioContext;
+      window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
 
-    if (!AudioContextClass) {
-      throw new Error("Web Audio API is not supported in this browser");
-    }
+    // Create isolated context for playback
+    audioContextRef.current = new AudioContextClass({ sampleRate: 24000 });
 
-    audioContextRef.current = new AudioContextClass({ sampleRate: 16000 });
+    // Create hidden audio element
+    const audioElement = document.createElement("audio");
+    audioElement.style.display = "none";
+    document.body.appendChild(audioElement);
+    outputAudioRef.current = audioElement;
 
     // 1) Open secure WS and ask for blobs
     const ws = new WebSocket(SPEECH_URL);
@@ -32,24 +37,30 @@ export default function TextToSpeach() {
       sendInitData(ws, RandomId);
     };
 
-    ws.onmessage = async (e) => {
-      try {
-        // 2) e.data is an ArrayBuffer of raw PCM16 @16kHz mono
-        const pcmBuffer = e.data as ArrayBuffer;
-        console.log({ pcmBuffer });
+    const combineBuffers = (
+      buffer1: ArrayBuffer,
+      buffer2: ArrayBuffer
+    ): ArrayBuffer => {
+      const tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+      tmp.set(new Uint8Array(buffer1), 0);
+      tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
+      return tmp.buffer;
+    };
 
-        if (!pcmBuffer.byteLength) {
+    const playAudioBuffer = async (buffer: ArrayBuffer) => {
+      try {
+        if (!buffer.byteLength) {
           console.warn("Received empty audio buffer");
           return;
         }
 
-        // 3) Wrap it in a WAV header
-        const wavBuffer = makeWav(pcmBuffer, {
+        // Wrap it in a WAV header
+        const wavBuffer = makeWav(buffer, {
           sampleRate: 24000,
           channels: 1,
         });
 
-        // 4) Create blob and decode
+        // Create blob and decode
         const blob = new Blob([wavBuffer], { type: "audio/wav" });
         const arrayBuffer = await blob.arrayBuffer();
 
@@ -59,7 +70,7 @@ export default function TextToSpeach() {
           arrayBuffer
         );
 
-        // 5) Create and schedule playback
+        // Create and schedule playback
         const source = audioContextRef.current.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(audioContextRef.current.destination);
@@ -80,8 +91,52 @@ export default function TextToSpeach() {
       }
     };
 
+    const processQueue = () => {
+      // Process if we have at least 2 chunks
+      if (chunkQueueRef.current.length >= 2) {
+        const chunk1 = chunkQueueRef.current.shift()!;
+        const chunk2 = chunkQueueRef.current.shift()!;
+        const combined = combineBuffers(chunk1, chunk2);
+        playAudioBuffer(combined);
+
+        // Continue processing if more chunks are available
+        if (chunkQueueRef.current.length >= 2) {
+          processQueue();
+        }
+      }
+      // Handle single chunk after timeout
+      else if (chunkQueueRef.current.length === 1) {
+        timeoutRef.current = setTimeout(() => {
+          if (chunkQueueRef.current.length > 0) {
+            const chunk = chunkQueueRef.current.shift()!;
+            playAudioBuffer(chunk);
+          }
+        }, 500); // Wait 500ms for next chunk
+      }
+    };
+
+    ws.onmessage = (e) => {
+      const pcmBuffer = e.data as ArrayBuffer;
+      chunkQueueRef.current.push(pcmBuffer);
+
+      // Clear any pending timeout when new data arrives
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+
+      processQueue();
+    };
+
     ws.onerror = (err) => console.error("WS error:", err);
-    ws.onclose = () => console.log("Speech WS closed");
+    ws.onclose = () => {
+      console.log("Speech WS closed");
+      // Flush remaining chunks
+      while (chunkQueueRef.current.length > 0) {
+        const chunk = chunkQueueRef.current.shift()!;
+        playAudioBuffer(chunk);
+      }
+    };
 
     (async () => {
       sendInitData(ws, RandomId);
@@ -91,6 +146,9 @@ export default function TextToSpeach() {
       ws.close();
       if (audioContextRef.current) {
         audioContextRef.current.close();
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
   }, []);

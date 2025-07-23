@@ -92,35 +92,35 @@ const AudioRecorderPage = () => {
 
   const initializeAudio = async () => {
     try {
+      // Enable echo cancellation and noise suppression
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: SAMPLE_RATE,
           channelCount: CHANNELS,
-          echoCancellation: false,
-          noiseSuppression: false,
+          echoCancellation: true, // Enabled
+          noiseSuppression: true, // Enabled
+          autoGainControl: true, // Added for better quality
         },
       });
 
       mediaStreamRef.current = stream;
 
-      // Type-safe AudioContext initialization without global declarations
       const AudioContextConstructor =
-        window.AudioContext ||
-        (window as { webkitAudioContext?: typeof AudioContext })
-          .webkitAudioContext;
+        window.AudioContext || (window as any).webkitAudioContext;
 
       if (!AudioContextConstructor) {
-        throw new Error("Web Audio API is not supported in this browser");
+        throw new Error("Web Audio API not supported");
       }
 
+      // Create isolated context for recording
       audioContextRef.current = new AudioContextConstructor({
         sampleRate: SAMPLE_RATE,
       });
 
-      // Rest of your initialization code...
       await audioContextRef.current.audioWorklet.addModule(
         "/audio-processor.js"
       );
+
       const source = audioContextRef.current.createMediaStreamSource(stream);
 
       processorRef.current = new AudioWorkletNode(
@@ -137,6 +137,8 @@ const AudioRecorderPage = () => {
       };
 
       source.connect(processorRef.current);
+
+      // Important: Don't connect to system output
       processorRef.current.connect(audioContextRef.current.destination);
 
       setIsRecording(true);

@@ -106,7 +106,9 @@ const AudioRecorderPage = () => {
       mediaStreamRef.current = stream;
 
       const AudioContextConstructor =
-        window.AudioContext || (window as any).webkitAudioContext;
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
 
       if (!AudioContextConstructor) {
         throw new Error("Web Audio API not supported");

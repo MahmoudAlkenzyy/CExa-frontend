@@ -13,23 +13,19 @@ export default function TextToSpeach() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Initialize AudioContext
-
     const AudioContextClass =
       window.AudioContext ||
       (window as unknown as { webkitAudioContext?: typeof AudioContext })
         .webkitAudioContext;
-    // Create isolated context for playback
+
     if (!AudioContextClass) return;
     audioContextRef.current = new AudioContextClass({ sampleRate: 24000 });
 
-    // Create hidden audio element
     const audioElement = document.createElement("audio");
     audioElement.style.display = "none";
     document.body.appendChild(audioElement);
     outputAudioRef.current = audioElement;
 
-    // 1) Open secure WS and ask for blobs
     const ws = new WebSocket(SPEECH_URL);
     ws.binaryType = "arraybuffer";
     socketRef.current = ws;
@@ -56,28 +52,16 @@ export default function TextToSpeach() {
           return;
         }
 
-        // Wrap it in a WAV header
-        const wavBuffer = makeWav(buffer, {
-          sampleRate: 24000,
-          channels: 1,
-        });
-
-        // Create blob and decode
-        const blob = new Blob([wavBuffer], { type: "audio/wav" });
-        const arrayBuffer = await blob.arrayBuffer();
-
         if (!audioContextRef.current) return;
 
         const audioBuffer = await audioContextRef.current.decodeAudioData(
-          arrayBuffer
+          buffer
         );
 
-        // Create and schedule playback
         const source = audioContextRef.current.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(audioContextRef.current.destination);
 
-        // Calculate start time for gapless playback
         const now = audioContextRef.current.currentTime;
         const startTime = isFirstRef.current
           ? now
@@ -87,33 +71,29 @@ export default function TextToSpeach() {
         nextStartTimeRef.current = startTime + audioBuffer.duration;
         isFirstRef.current = false;
 
-        console.log("▶️ Playing audio chunk");
+        console.log("▶️ Playing OGG audio chunk");
       } catch (err) {
         console.error("Playback failed:", err);
       }
     };
 
     const processQueue = () => {
-      // Process if we have at least 2 chunks
       if (chunkQueueRef.current.length >= 2) {
         const chunk1 = chunkQueueRef.current.shift()!;
         const chunk2 = chunkQueueRef.current.shift()!;
         const combined = combineBuffers(chunk1, chunk2);
         playAudioBuffer(combined);
 
-        // Continue processing if more chunks are available
         if (chunkQueueRef.current.length >= 2) {
           processQueue();
         }
-      }
-      // Handle single chunk after timeout
-      else if (chunkQueueRef.current.length === 1) {
+      } else if (chunkQueueRef.current.length === 1) {
         timeoutRef.current = setTimeout(() => {
           if (chunkQueueRef.current.length > 0) {
             const chunk = chunkQueueRef.current.shift()!;
             playAudioBuffer(chunk);
           }
-        }, 500); // Wait 500ms for next chunk
+        }, 500);
       }
     };
 
@@ -121,7 +101,6 @@ export default function TextToSpeach() {
       const pcmBuffer = e.data as ArrayBuffer;
       chunkQueueRef.current.push(pcmBuffer);
 
-      // Clear any pending timeout when new data arrives
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -133,7 +112,7 @@ export default function TextToSpeach() {
     ws.onerror = (err) => console.error("WS error:", err);
     ws.onclose = () => {
       console.log("Speech WS closed");
-      // Flush remaining chunks
+
       while (chunkQueueRef.current.length > 0) {
         const chunk = chunkQueueRef.current.shift()!;
         playAudioBuffer(chunk);
@@ -168,7 +147,6 @@ function makeWav(
   const wav = new ArrayBuffer(44 + buffer.byteLength);
   const view = new DataView(wav);
 
-  // RIFF header
   let p = 0;
   function writeString(s: string) {
     for (let i = 0; i < s.length; i++) view.setUint8(p++, s.charCodeAt(i));
@@ -179,9 +157,9 @@ function makeWav(
   writeString("WAVE");
   writeString("fmt ");
   view.setUint32(p, 16, true);
-  p += 4; // fmt chunk length
+  p += 4;
   view.setUint16(p, 1, true);
-  p += 2; // PCM
+  p += 2;
   view.setUint16(p, channels, true);
   p += 2;
   view.setUint32(p, sampleRate, true);
@@ -196,7 +174,6 @@ function makeWav(
   view.setUint32(p, buffer.byteLength, true);
   p += 4;
 
-  // Copy the PCM samples
   const uint8Array = new Uint8Array(wav);
   uint8Array.set(new Uint8Array(buffer), 44);
   return wav;

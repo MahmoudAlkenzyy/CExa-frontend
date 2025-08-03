@@ -16,25 +16,18 @@ const AudioRecorderPage = () => {
   const audioSocket = useRef<WebSocket | null>(null);
   const textSocket = useRef<WebSocket | null>(null);
   const agentSocket = useRef<WebSocket | null>(null);
-  //   const speachSocket = useRef<WebSocket | null>(null);
+
   const processorRef = useRef<AudioWorkletNode | null>(null);
-  //   const [speach, setSpeach] = useState<Blob[] | []>([]);
 
-  //   console.log(speach);
-
-  // WebSocket URLs
   const AUDIO_WS_URL = "https://cexa.eastus.cloudapp.azure.com:5000";
   const TEXT_WS_URL = "https://cexa.eastus.cloudapp.azure.com:5001";
   const AGENT_URL = "https://cexa.eastus.cloudapp.azure.com:5003";
 
-  // Audio configuration (matches Python settings)
   const CHUNK_SIZE = 256;
   const SAMPLE_RATE = 16000;
   const CHANNELS = 1;
-  //   console.log({ speach });
 
   useEffect(() => {
-    // Create socket instances
     const audio = new WebSocket(AUDIO_WS_URL);
     const text = new WebSocket(TEXT_WS_URL);
     const agent = new WebSocket(AGENT_URL);
@@ -43,16 +36,12 @@ const AudioRecorderPage = () => {
     textSocket.current = text;
     agentSocket.current = agent;
 
-    // TEXT SOCKET
     text.onmessage = (event) => {
       const textData = event.data;
-      //   console.log("Text message:", textData);
-      //   console.log({ text: event.data });
 
       addClient({ isclient: true, message: textData });
     };
 
-    // AGENT SOCKET
     agent.onmessage = (event) => {
       const data = event.data;
 
@@ -68,12 +57,9 @@ const AudioRecorderPage = () => {
         messageBuffer.current = "";
         return;
       }
-      //   console.log({data,message:messageBuffer.current});
+
       messageBuffer.current += data;
     };
-    // Speach SOCKET ^__^  *__*  -__-
-
-    // Send initial IDs once sockets are open
 
     (async () => {
       sendInitData(text, RandomId);
@@ -82,7 +68,6 @@ const AudioRecorderPage = () => {
     })();
 
     return () => {
-      // Clean up sockets on unmount
       audio.close();
       text.close();
       agent.close();
@@ -92,14 +77,13 @@ const AudioRecorderPage = () => {
 
   const initializeAudio = async () => {
     try {
-      // Enable echo cancellation and noise suppression
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: SAMPLE_RATE,
           channelCount: CHANNELS,
-          echoCancellation: true, // Enabled
-          noiseSuppression: true, // Enabled
-          autoGainControl: true, // Added for better quality
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
         },
       });
 
@@ -114,7 +98,6 @@ const AudioRecorderPage = () => {
         throw new Error("Web Audio API not supported");
       }
 
-      // Create isolated context for recording
       audioContextRef.current = new AudioContextConstructor({
         sampleRate: SAMPLE_RATE,
       });
@@ -140,7 +123,6 @@ const AudioRecorderPage = () => {
 
       source.connect(processorRef.current);
 
-      // Important: Don't connect to system output
       processorRef.current.connect(audioContextRef.current.destination);
 
       setIsRecording(true);
@@ -206,7 +188,6 @@ export const sendInitData = (
     socket.onopen = () => {
       socket.send(data);
       resolve();
-      // نكمل بعد ما يبعت الداتا
     };
   });
 };

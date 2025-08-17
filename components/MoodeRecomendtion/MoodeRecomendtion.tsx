@@ -54,7 +54,7 @@ const MoodeRecomendtion: React.FC = () => {
       const lastItemText = sent.message || "";
 
       const res = await fetch(
-        "https://cexa.eastus.cloudapp.azure.com:5004/sentiment",
+        "https://cexa-v2.eastus.cloudapp.azure.com:5004/sentiment",
         {
           method: "POST",
           headers: {

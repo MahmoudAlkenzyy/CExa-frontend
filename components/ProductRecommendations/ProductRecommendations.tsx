@@ -15,7 +15,7 @@ export interface NerDTO {
 }
 
 const ProductRecommendations = () => {
-  const WS_URL = "https://cexa.eastus.cloudapp.azure.com:5002";
+  const WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5002";
 
   const wsRef = useRef<WebSocket | null>(null);
   const responseRef = useRef("");

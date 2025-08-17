@@ -3,7 +3,7 @@ import { sendInitData } from "../../app/test/page";
 import { RandomId } from "../../constant";
 
 export default function TextToSpeach() {
-  const SPEECH_URL = "https://cexa.eastus.cloudapp.azure.com:5008";
+  const SPEECH_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5008";
   const socketRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const nextStartTimeRef = useRef(0);

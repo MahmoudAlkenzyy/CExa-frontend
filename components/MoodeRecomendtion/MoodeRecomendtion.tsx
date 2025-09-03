@@ -12,7 +12,6 @@ import { RandomId } from "../../constant";
 const MoodeRecomendtion: React.FC = () => {
   const updatData = useSpeachStore((state) => state.updateData);
   const sentimentSocket = useRef<WebSocket | null>(null);
-  const client = useSpeachStore((state) => state.client);
   //   const sent = client[client.length - 1];
   const { SpeachData } = useSpeachStore((state) => state);
   const SENTIMENT_WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5004";

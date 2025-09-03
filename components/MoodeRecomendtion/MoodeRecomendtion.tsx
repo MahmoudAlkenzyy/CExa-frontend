@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { FaFaceMeh } from "react-icons/fa6";
 import { IoMdHappy } from "react-icons/io";

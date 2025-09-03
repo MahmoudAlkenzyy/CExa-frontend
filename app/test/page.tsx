@@ -10,12 +10,10 @@ import { RandomId } from "../../constant";
 const AudioRecorderPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const { addClient } = useSpeachStore();
-  const messageBuffer = useRef("");
   const audioContextRef = useRef<AudioContext | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioSocket = useRef<WebSocket | null>(null);
   const textSocket = useRef<WebSocket | null>(null);
-  const agentSocket = useRef<WebSocket | null>(null);
 
   const processorRef = useRef<AudioWorkletNode | null>(null);
 

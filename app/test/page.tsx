@@ -21,7 +21,7 @@ const AudioRecorderPage = () => {
 
   const AUDIO_WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5000";
   const TEXT_WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5001";
-  const AGENT_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5003";
+  //   const AGENT_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5003";
 
   const CHUNK_SIZE = 256;
   const SAMPLE_RATE = 16000;
@@ -30,11 +30,11 @@ const AudioRecorderPage = () => {
   useEffect(() => {
     const audio = new WebSocket(AUDIO_WS_URL);
     const text = new WebSocket(TEXT_WS_URL);
-    const agent = new WebSocket(AGENT_URL);
+    // const agent = new WebSocket(AGENT_URL);
 
     audioSocket.current = audio;
     textSocket.current = text;
-    agentSocket.current = agent;
+    // agentSocket.current = agent;
 
     text.onmessage = (event) => {
       const textData = event.data;
@@ -42,35 +42,35 @@ const AudioRecorderPage = () => {
       addClient({ isclient: true, message: textData });
     };
 
-    agent.onmessage = (event) => {
-      const data = event.data;
+    // agent.onmessage = (event) => {
+    //   const data = event.data;
 
-      if (data === "Start Here!!") {
-        messageBuffer.current = "";
-        return;
-      }
+    //   if (data === "Start Here!!") {
+    //     messageBuffer.current = "";
+    //     return;
+    //   }
 
-      if (data === "End Here!!") {
-        if (messageBuffer.current !== "") {
-          addClient({ isclient: false, message: messageBuffer.current });
-        }
-        messageBuffer.current = "";
-        return;
-      }
+    //   if (data === "End Here!!") {
+    //     if (messageBuffer.current !== "") {
+    //       addClient({ isclient: false, message: messageBuffer.current });
+    //     }
+    //     messageBuffer.current = "";
+    //     return;
+    //   }
 
-      messageBuffer.current += data;
-    };
+    //   messageBuffer.current += data;
+    // };
 
     (async () => {
       sendInitData(text, RandomId);
-      sendInitData(agent, RandomId);
+      //   sendInitData(agent, RandomId);
       sendInitData(audio, RandomId);
     })();
 
     return () => {
       audio.close();
       text.close();
-      agent.close();
+      //   agent.close();
       stopRecording();
     };
   }, []);

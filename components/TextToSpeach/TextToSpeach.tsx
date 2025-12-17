@@ -5,8 +5,8 @@ import { sendInitData } from "../../app/test/page";
 import { RandomId } from "../../constant";
 
 export default function TextToSpeach() {
-  const SPEECH_URL = "wss://cexa-v2.eastus.cloudapp.azure.com:5008";
-  const INTERAPTION_URL = "wss://cexa-v2.eastus.cloudapp.azure.com:5006";
+  const SPEECH_URL = "wss://cexa-v2.westus.cloudapp.azure.com:5008";
+  const INTERAPTION_URL = "wss://cexa-v2.westus.cloudapp.azure.com:5006";
 
   const socketRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -16,7 +16,6 @@ export default function TextToSpeach() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
-  // interrupt flag
   const allowPlaybackRef = useRef(true);
 
   useEffect(() => {

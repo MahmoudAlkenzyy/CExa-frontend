@@ -17,9 +17,9 @@ const AudioRecorderPage = () => {
 
   const processorRef = useRef<AudioWorkletNode | null>(null);
 
-  const AUDIO_WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5000";
-  const TEXT_WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5001";
-  //   const AGENT_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5003";
+  const AUDIO_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5000";
+  const TEXT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5001";
+  //   const AGENT_URL = "https://cexa-v2.westus.cloudapp.azure.com:5003";
 
   const CHUNK_SIZE = 256;
   const SAMPLE_RATE = 16000;

@@ -14,7 +14,7 @@ const MoodeRecomendtion: React.FC = () => {
   const sentimentSocket = useRef<WebSocket | null>(null);
   //   const sent = client[client.length - 1];
   const { SpeachData } = useSpeachStore((state) => state);
-  const SENTIMENT_WS_URL = "https://cexa-v2.eastus.cloudapp.azure.com:5004";
+  const SENTIMENT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5004";
 
   useEffect(() => {
     const sentiment = new WebSocket(SENTIMENT_WS_URL);

@@ -35,7 +35,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
       const lastItemText = items[items.length - 1].text || "";
       if (items[items.length - 1].title) return;
       const res = await fetch(
-        "https://cexa-v2.eastus.cloudapp.azure.com:5012/summary",
+        "https://cexa-v2.westus.cloudapp.azure.com:5012/summary",
         {
           method: "POST",
           headers: {

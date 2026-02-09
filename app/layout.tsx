@@ -36,7 +36,7 @@ export default function RootLayout({
           <div className="bg-[#04050C] relative">
             <Header />
             <div className="flex z-1 relative  ">
-              <div className="  md:flex hidden  md:h-[calc(100dvh-72px)]  ">
+              <div className="  md:flex hidden  md:h-[calc(100dvh-72px)]   ">
                 <Sidebar />
               </div>
               <div className="flex-grow ">{children}</div>

@@ -25,6 +25,8 @@ interface SpeachState {
   isRecording: boolean;
   callDuration: number;
   language: "ar" | "en";
+  sessionId: string;
+  isMuted: boolean;
   updateData: (data: SpeachData) => void;
   updateSum: (sum: {
     point1: string;
@@ -38,6 +40,9 @@ interface SpeachState {
   setIsRecording: (recording: boolean) => void;
   setCallDuration: (duration: number) => void;
   toggleLanguage: () => void;
+  setSessionId: (id: string) => void;
+  setIsMuted: (muted: boolean) => void;
+  resetStore: () => void;
 }
 
 // Create the store
@@ -69,6 +74,8 @@ const useSpeachStore = create<SpeachState>((set) => ({
   isRecording: false,
   callDuration: 0,
   language: "ar",
+  sessionId: Math.random().toString(36).substring(7),
+  isMuted: false,
 
   updateData: (data) => {
     const confidenceScores = data.confidenceScores;
@@ -129,6 +136,28 @@ const useSpeachStore = create<SpeachState>((set) => ({
 
   toggleLanguage: () => {
     set((state) => ({ language: state.language === "ar" ? "en" : "ar" }));
+  },
+
+  setSessionId: (sessionId) => {
+    set({ sessionId });
+  },
+
+  setIsMuted: (isMuted) => {
+    set({ isMuted });
+  },
+
+  resetStore: () => {
+    set({
+      SpeachData: {
+        confidenceScores: 0,
+        sentiment: "Neutral",
+        moodRecomendtion: "",
+      },
+      client: [],
+      callDuration: 0,
+      moodLabel: "عادي",
+      background: "#FACC15",
+    });
   },
 }));
 

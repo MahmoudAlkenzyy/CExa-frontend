@@ -13,7 +13,7 @@ const CustomerInfo = () => {
   return (
     <div
       dir={language === "ar" ? "rtl" : "ltr"}
-      className="flex lg:flex-col grow  text-xs w-full text-white flex-col p-4 h-full rounded-3xl gap-2 overflow-hidden border border-[#1B3E9080]"
+      className="flex lg:flex-col grow  text-sm w-full text-white flex-col p-4 h-full rounded-3xl gap-2 overflow-hidden border border-[#1B3E9080]"
     >
       <h2 className="font-semibold text-xl flex items-center gap-1 md:flex-wrap">
         {language === "ar" ? "معلومات العميل" : "Customer Info"}
@@ -41,29 +41,27 @@ const CustomerInfo = () => {
 
         <li className="flex flex-col md:flex-row items-center  gap-2  py-2">
           <p className=" text-[#426DD2] p-1 rounded-lg">
-            <LuPhone className="rounded-180" size={12} />
+            <LuPhone className="rounded-180" size={14} />
           </p>
           01129672307
         </li>
         <li className="flex flex-col md:flex-row items-center  gap-2  py-2">
           <p className=" text-[#426DD2]  p-1 rounded-lg">
-            <MdOutlineMailOutline size={12} />
+            <MdOutlineMailOutline size={14} />
           </p>
           <div className="text-wrap">example@test.com</div>
         </li>
         <li className="flex flex-col md:flex-row items-center  gap-2  py-2">
           <p className=" text-[#426DD2]  p-1 rounded-lg">
-            <FaPassport size={12} />
+            <FaPassport size={14} />
           </p>
           {language === "ar" ? "مصري" : "Egyptian"}
         </li>
         <li className="flex flex-col md:flex-row items-center  gap-2  py-2">
           <p className=" text-[#426DD2]  p-1 rounded-lg">
-            <IoLocationOutline size={12} />
+            <IoLocationOutline size={14} />
           </p>
-          {language === "ar"
-            ? "شارع رايل حلوان القاهرة"
-            : "Rail St., Helwan, Cairo"}
+          {language === "ar" ? "شارع رايل  القاهرة" : "Rail St., Cairo"}
         </li>
       </ul>
     </div>

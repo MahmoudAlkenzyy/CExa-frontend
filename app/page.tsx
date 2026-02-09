@@ -44,8 +44,8 @@ export default function Home() {
           <ProductRecommendations />
         </div>
       </div>
-      <div className=" w-full bg-gradient-to-r from-[#0d1d41] via-[#384d7e] to-[#0d1d41] p-[1px] rounded-3xl">
-        <div className="m-[1px] rounded-3xl bg-[#04050C]">
+      <div className=" bg-gradient-to-tr mx-2 from-[#0d1d41] via-[#1B3E90] to-[#0d1d41] p-[1px] rounded-3xl mb-2">
+        <div className="m-[1px] rounded-3xl bg-[#090b1ac7]">
           <AudioRecorderPage />
         </div>
       </div>

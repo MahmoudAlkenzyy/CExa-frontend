@@ -6,15 +6,24 @@ import { IoMdHappy } from "react-icons/io";
 
 import useSpeachStore from "../../lib/store";
 import { sendInitData } from "../../app/test/page";
-import { RandomId } from "../../constant";
 
 const MoodeRecomendtion: React.FC = () => {
   const updatData = useSpeachStore((state) => state.updateData);
   const sentimentSocket = useRef<WebSocket | null>(null);
-  const { SpeachData, language } = useSpeachStore((state) => state);
+  const { SpeachData, language, sessionId, isRecording } = useSpeachStore(
+    (state) => state,
+  );
   const SENTIMENT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5004";
 
   useEffect(() => {
+    if (!isRecording) {
+      if (sentimentSocket.current) {
+        sentimentSocket.current.close();
+        sentimentSocket.current = null;
+      }
+      return;
+    }
+
     const sentiment = new WebSocket(SENTIMENT_WS_URL);
 
     sentiment.onmessage = (event) => {
@@ -32,13 +41,16 @@ const MoodeRecomendtion: React.FC = () => {
 
     sentimentSocket.current = sentiment;
     (async () => {
-      sendInitData(sentiment, RandomId);
+      sendInitData(sentiment, sessionId);
     })();
 
     return () => {
-      sentiment.close();
+      if (sentimentSocket.current) {
+        sentimentSocket.current.close();
+        sentimentSocket.current = null;
+      }
     };
-  }, []);
+  }, [sessionId, isRecording]);
 
   console.log({ SpeachData });
 

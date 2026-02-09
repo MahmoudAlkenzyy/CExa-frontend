@@ -4,9 +4,13 @@ import useSpeachStore from "@/lib/store";
 import { useState, useRef, useEffect } from "react";
 import { RandomId } from "../../constant";
 import { FaMicrophoneSlash, FaPhone, FaPhoneSlash } from "react-icons/fa6";
+import { SummaryPopup } from "../../components/SummaryPopup/SummaryPopup";
 
 const AudioRecorderPage = () => {
   const [isRecordingLocal, setIsRecordingLocal] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
+  const [summaryData, setSummaryData] = useState<any>(null);
+
   const {
     addClient,
     setIsRecording,
@@ -14,51 +18,53 @@ const AudioRecorderPage = () => {
     setCallDuration,
     callDuration,
     language,
+    sessionId,
+    setSessionId,
+    isMuted,
+    setIsMuted,
+    resetStore,
   } = useSpeachStore();
-  // ... rest of refs
+
   const audioContextRef = useRef<AudioContext | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioSocket = useRef<WebSocket | null>(null);
   const textSocket = useRef<WebSocket | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
   const processorRef = useRef<AudioWorkletNode | null>(null);
 
   const AUDIO_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5000";
   const TEXT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5001";
-  //   const AGENT_URL = "https://cexa-v2.westus.cloudapp.azure.com:5003";
 
   const CHUNK_SIZE = 256;
   const SAMPLE_RATE = 16000;
   const CHANNELS = 1;
 
-  useEffect(() => {
+  const connectSockets = (id: string) => {
+    // Close existing sockets if any
+    if (audioSocket.current) audioSocket.current.close();
+    if (textSocket.current) textSocket.current.close();
+
     const audio = new WebSocket(AUDIO_WS_URL);
     const text = new WebSocket(TEXT_WS_URL);
-    // const agent = new WebSocket(AGENT_URL);
 
     audioSocket.current = audio;
     textSocket.current = text;
-    // agentSocket.current = agent;
 
     text.onmessage = (event) => {
       const textData = event.data;
       console.log({ textData });
-
       addClient({ isclient: true, message: textData });
     };
 
-    (async () => {
-      sendInitData(text, RandomId);
-      //   sendInitData(agent, RandomId);
-      sendInitData(audio, RandomId);
-    })();
+    audio.onopen = () => audio.send(id);
+    text.onopen = () => text.send(id);
+  };
 
+  useEffect(() => {
     return () => {
-      audio.close();
-      text.close();
-      //   agent.close();
       stopRecording();
+      if (audioSocket.current) audioSocket.current.close();
+      if (textSocket.current) textSocket.current.close();
     };
   }, []);
 
@@ -101,6 +107,11 @@ const AudioRecorderPage = () => {
       mediaStreamRef.current = stream;
       setMediaStream(stream);
 
+      // Handle Initial Mute State
+      stream.getAudioTracks().forEach((track) => {
+        track.enabled = !isMuted;
+      });
+
       const AudioContextConstructor =
         window.AudioContext ||
         (window as unknown as { webkitAudioContext?: typeof AudioContext })
@@ -127,14 +138,13 @@ const AudioRecorderPage = () => {
       );
 
       processorRef.current.port.onmessage = (event) => {
-        if (audioSocket.current?.readyState === WebSocket.OPEN) {
+        if (audioSocket.current?.readyState === WebSocket.OPEN && !isMuted) {
           const rawData = new Uint8Array(event.data);
           audioSocket.current.send(rawData);
         }
       };
 
       source.connect(processorRef.current);
-
       processorRef.current.connect(audioContextRef.current.destination);
 
       setIsRecordingLocal(true);
@@ -147,23 +157,73 @@ const AudioRecorderPage = () => {
 
   const startRecording = async () => {
     if (!isRecordingLocal) {
+      resetStore();
+      const newId = Math.random().toString(36).substring(7);
+      setSessionId(newId);
+      connectSockets(newId);
       await initializeAudio();
+      setShowSummary(false);
     }
   };
 
-  const stopRecording = () => {
+  const stopRecording = async () => {
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => track.stop());
     }
     if (audioContextRef.current) {
       audioContextRef.current.close();
     }
+
+    // Close sockets
+    if (audioSocket.current) audioSocket.current.close();
+    if (textSocket.current) textSocket.current.close();
+
     setIsRecordingLocal(false);
     setIsRecording(false);
     setMediaStream(null);
+
+    setShowSummary(true);
+
+    // Call API for summary
+    // if (isRecordingLocal) {
+    //   fetchSummary();
+    // }
   };
+
+  //   const fetchSummary = async () => {
+  //     try {
+  //       // Assuming there's a summary API
+  //       const response = await fetch(
+  //         `https://cexa-v2.westus.cloudapp.azure.com:5003/summary/${sessionId}`,
+  //       );
+  //       const data = await response.json();
+  //       setSummaryData(data);
+  //       setShowSummary(true);
+  //     } catch (error) {
+  //       console.error("Error fetching summary:", error);
+  //       // Fallback for demo
+  //       setSummaryData({
+  //         message:
+  //           language === "ar"
+  //             ? "تم إنهاء المكالمة بنجاح"
+  //             : "Call ended successfully",
+  //       });
+  //       setShowSummary(true);
+  //     }
+  //   };
+
+  const toggleMute = () => {
+    const newMuteState = !isMuted;
+    setIsMuted(newMuteState);
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getAudioTracks().forEach((track) => {
+        track.enabled = !newMuteState;
+      });
+    }
+  };
+
   return (
-    <div className="">
+    <div className="relative">
       {/* Control Buttons */}
       <div className="flex justify-center gap-5 text-white rounded-b-xl py-5">
         <button
@@ -186,8 +246,14 @@ const AudioRecorderPage = () => {
           <span>{formatTime(callDuration)}</span>
           <span>{language === "ar" ? "محمود الكنزي" : "Mahmoud Al-Kenzi"}</span>
         </p>
-        <button className="border border-[#A6A1A1] hover:scale-105 transition-all duration-[400] hover:bg-opacity-90  rounded-full p-3 text-[#00000099] flex justify-center items-center">
-          <FaMicrophoneSlash color="#A6A1A1" size={20} />
+        <button
+          onClick={toggleMute}
+          className={`border border-[#A6A1A1] hover:scale-105 transition-all duration-[400] hover:bg-opacity-90 rounded-full p-3 text-[#00000099] flex justify-center items-center ${isMuted ? "bg-red-500/20 shadow-[0_0_10px_red]" : ""}`}
+        >
+          <FaMicrophoneSlash
+            color={isMuted ? "#E52121" : "#A6A1A1"}
+            size={20}
+          />
         </button>
         <button
           onClick={stopRecording}
@@ -199,6 +265,14 @@ const AudioRecorderPage = () => {
           <FaPhoneSlash color="#E52121" size={20} />
         </button>
       </div>
+
+      <SummaryPopup
+        showSummary={showSummary}
+        setShowSummary={setShowSummary}
+        language={language}
+        summaryData={summaryData}
+        sessionId={sessionId}
+      />
     </div>
   );
 };

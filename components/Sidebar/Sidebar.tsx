@@ -66,7 +66,7 @@ const Sidebar = () => {
             collapsed ? "w-[80px]" : "w-[250px]"
           }`}
         >
-          <div className="h-full bg-[#04050C] rounded-xl overflow-hidden">
+          <div className="h-full bg-[#04050ce5] rounded-xl overflow-hidden">
             <nav className="flex flex-col h-full">
               {/* Toggle Button
             <MenuItem

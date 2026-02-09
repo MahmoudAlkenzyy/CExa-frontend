@@ -2,14 +2,17 @@
 
 import React, { useEffect, useRef } from "react";
 import { sendInitData } from "../../app/test/page";
-import { RandomId } from "../../constant";
+import { useStore } from "zustand";
+import useSpeachStore from "../../lib/store";
 
 export default function TextToSpeach() {
   const SPEECH_URL = "wss://cexa-v2.westus.cloudapp.azure.com:5008";
   const INTERAPTION_URL = "wss://cexa-v2.westus.cloudapp.azure.com:5006";
   const SAMPLE_RATE = 24000; // Must match server sample rate
+  const { sessionId, isRecording } = useSpeachStore((state) => state);
 
   const socketRef = useRef<WebSocket | null>(null);
+  const interaptionSocketRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const scriptNodeRef = useRef<ScriptProcessorNode | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
@@ -21,6 +24,12 @@ export default function TextToSpeach() {
   const allowPlaybackRef = useRef(true);
 
   useEffect(() => {
+    if (!isRecording) {
+      if (socketRef.current) socketRef.current.close();
+      if (interaptionSocketRef.current) interaptionSocketRef.current.close();
+      return;
+    }
+
     const AudioContextClass =
       window.AudioContext ||
       (window as unknown as { webkitAudioContext?: typeof AudioContext })
@@ -34,7 +43,7 @@ export default function TextToSpeach() {
         sampleRate: SAMPLE_RATE,
       });
       console.log(
-        `AudioContext created with sample rate: ${audioContextRef.current.sampleRate}Hz`
+        `AudioContext created with sample rate: ${audioContextRef.current.sampleRate}Hz`,
       );
 
       // Create gain node for volume control
@@ -51,7 +60,7 @@ export default function TextToSpeach() {
       const actualSampleRate = audioContextRef.current.sampleRate;
       if (actualSampleRate !== SAMPLE_RATE) {
         console.warn(
-          `WARNING: Sample rate mismatch! Server: ${SAMPLE_RATE}Hz, Browser: ${actualSampleRate}Hz`
+          `WARNING: Sample rate mismatch! Server: ${SAMPLE_RATE}Hz, Browser: ${actualSampleRate}Hz`,
         );
         console.warn(`Audio will be resampled. This may affect quality.`);
       }
@@ -62,6 +71,7 @@ export default function TextToSpeach() {
     socketRef.current = ws;
 
     const interaption = new WebSocket(INTERAPTION_URL);
+    interaptionSocketRef.current = interaption;
 
     ws.onopen = () => {
       console.log("🎧 Speech WS open");
@@ -113,7 +123,7 @@ export default function TextToSpeach() {
       scriptNodeRef.current = audioContextRef.current.createScriptProcessor(
         4096,
         1,
-        1
+        1,
       );
 
       let position = 0;
@@ -148,7 +158,7 @@ export default function TextToSpeach() {
               underflowCount++;
               if (underflowCount === 1) {
                 console.log(
-                  "Audio buffer underflow - waiting for more data..."
+                  "Audio buffer underflow - waiting for more data...",
                 );
               }
               for (let i = samplesWritten; i < samplesNeeded; i++) {
@@ -164,7 +174,7 @@ export default function TextToSpeach() {
           // Copy samples from current buffer
           const samplesToCopy = Math.min(
             currentBuffer.length - position,
-            samplesNeeded - samplesWritten
+            samplesNeeded - samplesWritten,
           );
 
           for (let i = 0; i < samplesToCopy; i++) {
@@ -187,7 +197,7 @@ export default function TextToSpeach() {
         const bytes = e.data.byteLength;
         totalBytesRef.current += bytes;
         console.log(
-          `Received audio chunk: ${bytes} bytes (total: ${totalBytesRef.current} bytes)`
+          `Received audio chunk: ${bytes} bytes (total: ${totalBytesRef.current} bytes)`,
         );
 
         // Convert Int16 PCM to Float32 for Web Audio API
@@ -218,25 +228,25 @@ export default function TextToSpeach() {
           totalBytesRef.current /
           2 /
           SAMPLE_RATE
-        ).toFixed(2)}s at ${SAMPLE_RATE}Hz)`
+        ).toFixed(2)}s at ${SAMPLE_RATE}Hz)`,
       );
       stopCurrentAudio();
     };
 
     (async () => {
-      sendInitData(ws, RandomId);
-      sendInitData(interaption, RandomId);
+      sendInitData(ws, sessionId);
+      sendInitData(interaption, sessionId);
     })();
 
     return () => {
-      ws.close();
-      interaption.close();
+      if (socketRef.current) socketRef.current.close();
+      if (interaptionSocketRef.current) interaptionSocketRef.current.close();
       stopCurrentAudio();
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }
     };
-  }, []);
+  }, [sessionId, isRecording]);
 
   return <div className="hidden">Streaming text-to-speech…</div>;
 }

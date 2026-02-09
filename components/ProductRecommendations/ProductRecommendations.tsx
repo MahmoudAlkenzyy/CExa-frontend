@@ -16,16 +16,24 @@ export interface NerDTO {
 import useSpeachStore from "@/lib/store";
 
 const ProductRecommendations = () => {
-  const { language } = useSpeachStore();
+  const { language, sessionId, isRecording } = useSpeachStore();
   const WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5002";
 
   const wsRef = useRef<WebSocket | null>(null);
   const [streamingText, setStreamingText] = useState("");
 
   useEffect(() => {
+    if (!isRecording) {
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+      return;
+    }
+
     const sendInitData = (socket: WebSocket) => {
       socket.onopen = () => {
-        socket.send(RandomId);
+        socket.send(sessionId);
       };
     };
     const ws = new WebSocket(WS_URL);
@@ -69,9 +77,12 @@ const ProductRecommendations = () => {
 
     sendInitData(wsRef.current);
     return () => {
-      ws.close();
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
     };
-  }, [language]);
+  }, [language, sessionId, isRecording]);
 
   const formatToMarkdown = (text: string) => {
     return text

@@ -41,7 +41,7 @@ export default function RootLayout({
               </div>
               <div className="flex-grow ">{children}</div>
             </div>
-            <div className="absolute  right-0 bottom-0 bg-[#1B3E90]  rounded-full z-[0] w-[1200px] h-[750px]  top-1/2 left-1/2 blur-[300px] -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute  right-0 bottom-0 bg-[#1B3E90]  rounded-full z-[0] w-[1200px] h-[650px]  top-1/2 left-1/2 blur-[300px] -translate-x-1/2 -translate-y-1/2"></div>
           </div>
         </Theme>
       </body>

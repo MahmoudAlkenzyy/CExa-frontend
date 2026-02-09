@@ -28,15 +28,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#04050C] ${geistSans.variable} ${geistMono.variable} antialiased `}
-        style={{ height: "100dvh", overflow: "hidden" }}
+        className={`md:h-100dvh h-full bg-[#04050C] ${geistSans.variable} ${geistMono.variable} antialiased `}
+        style={{ overflow: "hidden" }}
       >
         {/* <Providers> */}
         <Theme className="">
           <div className="bg-[#04050C] relative">
             <Header />
             <div className="flex z-1 relative  ">
-              <div className=" flex  h-[calc(100dvh-72px)]  ">
+              <div className="  md:flex hidden  md:h-[calc(100dvh-72px)]  ">
                 <Sidebar />
               </div>
               <div className="flex-grow ">{children}</div>

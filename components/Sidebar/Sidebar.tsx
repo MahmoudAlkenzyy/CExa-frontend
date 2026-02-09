@@ -60,7 +60,7 @@ const Sidebar = () => {
 
   return (
     <div className="bg-gradient-to-b flex grow from-[#0d1d41] via-[#6D94F0] to-[#0d1d41] p-[2px] rounded-2xl m-1">
-      <div className="     rounded-2xl ">
+      <div className="rounded-2xl ">
         <div
           className={`h-full transition-all duration-300 ${
             collapsed ? "w-[80px]" : "w-[250px]"

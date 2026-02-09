@@ -160,8 +160,8 @@ const VoiceWaves: React.FC = () => {
       </p>
       <canvas
         ref={canvasRef}
-        width={600}
-        height={200}
+        width={500}
+        height={115}
         className=" bg-transparent w-[60%] mx-auto"
         style={{ maxWidth: "600px" }}
       />

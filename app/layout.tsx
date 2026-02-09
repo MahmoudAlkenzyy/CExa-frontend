@@ -28,22 +28,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`md:h-100dvh h-full bg-[#04050C] ${geistSans.variable} ${geistMono.variable} antialiased `}
-        style={{ overflow: "hidden" }}
+        className={`lg:h-screen h-full bg-[#04050C] ${geistSans.variable} ${geistMono.variable} antialiased  `}
+        style={{ overflow: "hidden", position: "relative" }}
       >
         {/* <Providers> */}
-        <Theme className="">
-          <div className="bg-[#04050C] relative">
-            <Header />
-            <div className="flex z-1 relative  ">
-              <div className="  md:flex hidden  md:h-[calc(100dvh-72px)]   ">
-                <Sidebar />
-              </div>
-              <div className="flex-grow ">{children}</div>
+        {/* <Theme className=""> */}
+        <div className="bg-[#04050C] min-h-screen relative overflow-x-hidden flex flex-col">
+          <Header />
+          <div className="flex z-1 relative grow flex-1 h-full">
+            <div className="md:flex hidden h-[calc(100vh-72px)]">
+              <Sidebar />
             </div>
-            <div className="absolute  right-0 bottom-0 bg-[#1B3E90]  rounded-full z-[0] w-[1200px] h-[650px]  top-1/2 left-1/2 blur-[300px] -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="flex-grow overflow-y-auto">{children}</div>
           </div>
-        </Theme>
+          <div className="absolute  right-0 bottom-0 bg-[#1B3E90]  rounded-full z-[0] w-[1200px] h-[650px]  top-1/2 left-1/2 blur-[300px] -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        {/* </Theme> */}
       </body>
     </html>
   );

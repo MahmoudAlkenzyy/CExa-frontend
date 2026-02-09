@@ -9,7 +9,6 @@ import { SummaryPopup } from "../../components/SummaryPopup/SummaryPopup";
 const AudioRecorderPage = () => {
   const [isRecordingLocal, setIsRecordingLocal] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
-  const [summaryData, setSummaryData] = useState<any>(null);
 
   const {
     addClient,
@@ -62,7 +61,7 @@ const AudioRecorderPage = () => {
 
   useEffect(() => {
     return () => {
-      stopRecording();
+      //   stopRecording();
       if (audioSocket.current) audioSocket.current.close();
       if (textSocket.current) textSocket.current.close();
     };
@@ -270,7 +269,6 @@ const AudioRecorderPage = () => {
         showSummary={showSummary}
         setShowSummary={setShowSummary}
         language={language}
-        summaryData={summaryData}
         sessionId={sessionId}
       />
     </div>

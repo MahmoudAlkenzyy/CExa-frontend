@@ -13,7 +13,6 @@ const Header = () => {
       <div className="flex items-center border-[.5px] border-[#1B3E90] justify-between px-10 p-2 w-full text-white h-full  rounded-xl">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold text-white">CExa</h1>
-          {/* SVG Logo ... */}
           <svg
             width="105"
             height="51"
@@ -68,11 +67,11 @@ const Header = () => {
           </svg>
         </div>
 
-        <div className="relative w-1/2 rounded border border-[#1B3E90] pe-5 ">
+        <div className="relative w-1/2 rounded border border-[#1B3E9090] pe-5 ">
           <Input
             placeholder={language === "ar" ? "بحث..." : "Search..."}
             dir={language === "ar" ? "rtl" : "ltr"}
-            className="w-full text-white py-1 pl-10 pr-4 bg-transparent border-0"
+            className="w-full text-white py-0 pl-10 pr-4 bg-transparent border-0"
           />
           <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#1B3E90] h-4 w-4" />
         </div>

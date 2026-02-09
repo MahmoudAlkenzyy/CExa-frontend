@@ -6,13 +6,11 @@ export const SummaryPopup = ({
   showSummary,
   setShowSummary,
   language,
-  summaryData,
   sessionId,
 }: {
   showSummary: boolean;
   setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
   language: string;
-  summaryData: any;
   sessionId: string;
 }) => {
   const [Data, setData] = useState<{
@@ -66,9 +64,9 @@ export const SummaryPopup = ({
   return (
     <div className="">
       {showSummary && (
-        <div className="fixed inset-0  z-[100] flex items-center justify-center bg-[black/70] backdrop-blur-sm ">
-          <div className="bg-[#050711] relative border border-[#1B3E90] p-8 rounded-3xl  overflow-hidden translate-y-5 max-w-4xl w-full mx-4 text-white text-center">
-            <h3 className="text-2xl relative z-10  mb-4 border-[#1B3E90] border rounded-xl  p-2">
+        <div className="fixed inset-0  z-[100] flex items-center justify-center bg-[black/70] backdrop-blur-sm w-[100dvw] ">
+          <div className="bg-[#050711] relative border border-[#1B3E90] p-8 rounded-3xl  overflow-hidden translate-y-5  lg:max-w-4xl max-w-xl  mx-4 text-white text-center">
+            <h3 className="text-lg md:text-xl lg:text-2xl relative z-10 mb-4 border-[#1B3E90] border rounded-xl p-2">
               {language === "ar" ? "تقييم المكالمة" : "Call Evaluation"}
             </h3>
 
@@ -96,12 +94,12 @@ export const SummaryPopup = ({
                       dir={language === "ar" ? "rtl" : "ltr"}
                       className="w-full"
                     >
-                      <p className=" text-[18px] text-start p-2  mb-3">
+                      <p className="text-sm md:text-base lg:text-[18px] text-start p-2 mb-3">
                         {language === "ar"
                           ? "تقييم الخدمة"
                           : "Service Evaluation"}
                       </p>
-                      <div className="flex items-center gap-1 my- text-[16px]">
+                      <div className="flex items-center gap-1 my- text-xs md:text-sm lg:text-base">
                         <span className="block w-4 h-4 blur-[1px] bg-[#3788E5] rounded-full" />{" "}
                         <p className="flex items-center justify-between gap-1 my-2 w-full">
                           <span>
@@ -123,7 +121,7 @@ export const SummaryPopup = ({
                       </div>
                     </div>{" "}
                     <div className="relative flex justify-center">
-                      <div className="relative w-[130px] h-[130px]">
+                      <div className="relative w-[100px] h-[100px] md:w-[115px] md:h-[115px] lg:w-[130px] lg:h-[130px]">
                         <svg
                           viewBox="0 0 162 162"
                           fill="none"
@@ -234,8 +232,8 @@ export const SummaryPopup = ({
                           </defs>
                         </svg>
 
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                          <span className="bg-gradient-to-b from-[#1C6CB7] font-bold text-2xl to-[#0C3051] inline-block text-transparent bg-clip-text text-center ">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-lg md:text-xl lg:text-2xl">
+                          <span className="bg-gradient-to-b from-[#1C6CB7] font-bold to-[#0C3051] inline-block text-transparent bg-clip-text text-center ">
                             40%
                           </span>
                         </div>
@@ -247,10 +245,10 @@ export const SummaryPopup = ({
                       dir={language === "ar" ? "rtl" : "ltr"}
                       className="w-full"
                     >
-                      <p className=" text-[18px] mb-3 p-2 text-start">
+                      <p className="text-sm md:text-base lg:text-[18px] mb-3 p-2 text-start">
                         {language === "ar" ? "تقييم الوكيل" : "Agent Rating"}
                       </p>
-                      <div className="flex items-center gap-1 my- text-[16px]">
+                      <div className="flex items-center gap-1 my- text-xs md:text-sm lg:text-base">
                         <span className="block w-4 h-4 blur-[1px] bg-[#3788E5] rounded-full" />{" "}
                         <p className="flex items-center justify-between gap-1 my-2 w-full">
                           <span>
@@ -272,7 +270,7 @@ export const SummaryPopup = ({
                       </div>
                     </div>{" "}
                     <div className="relative flex justify-center">
-                      <div className="relative w-[130px] h-[130px]">
+                      <div className="relative w-[100px] h-[100px] md:w-[115px] md:h-[115px] lg:w-[130px] lg:h-[130px]">
                         <svg
                           viewBox="0 0 162 162"
                           fill="none"
@@ -383,8 +381,8 @@ export const SummaryPopup = ({
                           </defs>
                         </svg>
 
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                          <span className="bg-gradient-to-b from-[#1C6CB7] font-bold text-2xl to-[#0C3051] inline-block text-transparent bg-clip-text text-center ">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-lg md:text-xl lg:text-2xl">
+                          <span className="bg-gradient-to-b from-[#1C6CB7] font-bold to-[#0C3051] inline-block text-transparent bg-clip-text text-center ">
                             {Data.Agent_Evaluation_Rate}
                           </span>
                         </div>
@@ -422,14 +420,14 @@ export const SummaryPopup = ({
                 </div>
                 <div className="border relative z-10 border-[#1B3E90] rounded-2xl p-3 ">
                   <div className=" text-start flex justify-end items-center mb-2 px-2">
-                    <p className="text-lg ">
+                    <p className="text-sm md:text-base lg:text-lg">
                       {language === "ar"
                         ? "نسبة رضا العميل"
                         : "Customer Satisfaction Rate"}
                     </p>
                   </div>
                   <div className="w-fit mx-auto flex items-center gap-2 ">
-                    <p className="text-[#3788E5] font-bold">
+                    <p className="text-[#3788E5] font-bold text-lg md:text-xl lg:text-2xl">
                       {Data.Customer_Satisfaction_Rate}
                     </p>
                     <svg
@@ -450,7 +448,7 @@ export const SummaryPopup = ({
                         <rect
                           width={
                             (parseFloat(
-                              Data.Customer_Satisfaction_Rate.replace("%", ""),
+                              Data.Customer_Satisfaction_Rate?.replace("%", ""),
                             ) /
                               100) *
                               705 || 0

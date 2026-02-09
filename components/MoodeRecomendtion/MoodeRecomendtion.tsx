@@ -58,14 +58,14 @@ const MoodeRecomendtion: React.FC = () => {
     <div dir={language === "ar" ? "rtl" : "ltr"} className=" h-full ">
       <div className="!py-2 mb- h-full  bg-transparent text-xs">
         <div className="text-gray-600 mb-1 h-full   px-[8px] py-[10px]   rounded-lg ">
-          <p className="text-[20px] text-white mb-3">
+          <p className="text-base md:text-lg lg:text-[20px] text-white mb-3">
             {language === "ar"
               ? "توصيات بناء على حالة العميل"
               : "Sentiment-based Recommendations"}
           </p>
 
           <div className="flex ">
-            <div className="bg-[#1B3E90] shadow-[0_0_10px_#1B3E90] relative text-white grow rounded-3xl px-4 py-2 text-[16px] ">
+            <div className="bg-[#1B3E90] shadow-[0_0_10px_#1B3E90] relative text-white grow rounded-3xl px-4 py-2 text-sm md:text-base lg:text-[16px] ">
               <p>
                 {SpeachData.moodRecomendtion ||
                   (language === "ar"

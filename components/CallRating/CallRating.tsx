@@ -5,30 +5,36 @@ const CallRating = () => {
   const { language } = useSpeachStore();
 
   return (
-    <div className="flex items-center flex-col px-10 justify-center p-7 py-3 w-full text-white   rounded-2xl border border-[#1B3E9080]">
+    <div className="flex items-center flex-col px-2 justify-center p-2 py-3 w-full text-white   rounded-2xl border border-[#1B3E9080]">
       <div dir={language === "ar" ? "rtl" : "ltr"} className="w-full">
-        <p className=" text-[24px] font-semibold mb-3">
+        <p className="text-sm md:text-[16px] 2xl:text-[20px] font-semibold mb-3">
           {language === "ar" ? "المكالمات" : "Calls"}
         </p>
-        <div className="flex items-center gap-1 my- text-[16px]">
+        <div className="flex items-center justify-center gap-4 my- text-sm md:text-base lg:text-[14px]">
           <span className="block w-4 h-4 blur-[1px] bg-[#3788E5] rounded-full" />{" "}
-          <p className="flex items-center justify-between gap-1 my-2 w-full">
-            <span>{language === "ar" ? "مجموع المكالمات" : "Total Calls"}</span>
-            <span>100</span>
+          <p className="flex items-center w-fit justify-center gap-3 my-2 ">
+            <span className="">
+              {language === "ar" ? "مجموع المكالمات" : "Total Calls"}
+            </span>
+            <span className="md:text-[14px] lg:text-[16px] font-medium">
+              100
+            </span>
           </p>
         </div>
-        <div className="flex items-center  gap-1 my-2 ">
+        <div className="flex items-center justify-center gap-4 my-1 text-sm md:text-base lg:text-[14px]">
           <span className="block w-4 h-4 blur-[1px] bg-[#75C64B] rounded-full" />{" "}
-          <p className="flex items-center justify-between gap-1 my-2 w-full">
+          <p className="flex items-center w-fit justify-center gap-3 my-2 ">
             <span>
               {language === "ar" ? "مكالمات ناجحة" : "Successful Calls"}
             </span>
-            <span className="text-[#75C64B]">40</span>
+            <span className="text-[#75C64B] md:text-lg lg:text-xl font-medium">
+              40
+            </span>
           </p>
         </div>
       </div>{" "}
       <div className="relative flex justify-center">
-        <div className="relative w-[130px] h-[130px]">
+        <div className="relative w-[90px] h-[90px] md:w-[100px] md:h-[100px] 2xl:w-[130px] 2xl:h-[130px]">
           <svg
             viewBox="0 0 162 162"
             fill="none"
@@ -134,7 +140,7 @@ const CallRating = () => {
           </svg>
 
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-            <span className="bg-gradient-to-b from-[#1C6CB7] font-bold text-2xl to-[#0C3051] inline-block text-transparent bg-clip-text text-center ">
+            <span className="bg-gradient-to-b from-[#1C6CB7] font-bold text-lg md:text-xl lg:text-2xl xl:text-2xl to-[#0C3051] inline-block text-transparent bg-clip-text text-center ">
               40%
             </span>
           </div>

@@ -21,16 +21,16 @@ export default function Home() {
   return (
     <div
       dir={language === "ar" ? "ltr" : "rtl"}
-      className="flex flex-col containerr overflow-hidden relative z-10 gap-1 md:h-[calc(100dvh-72px)] "
+      className="flex flex-col containerr lg:overflow-hidden relative z-10 gap-1 lg:h-[calc(100dvh-72px)] h-full "
     >
       <div
-        className={`w-full flex flex-col md:flex-row grow ${language === "ar" ? "flex-row" : "flex-row"}`}
+        className={`w-full flex flex-col lg:flex-row grow ${language === "ar" ? "flex-row" : "flex-row"}`}
       >
-        <div className=" md:w-1/5  items-center justify-between bg flex flex-col m-2 rounded-3xl gap-2 p-4 border-[#1B3E90] border-2 ">
+        <div className=" lg:w-1/5  items-center justify-between bg flex flex-col m-2 rounded-3xl gap-2 p-4 border-[#1B3E90] border-2 ">
           <CallRating />
           <CustomerInfo />
         </div>
-        <div className=" md:w-2/5 border-[#1B3E90] border-2 flex flex-col gap-3 rounded-3xl p-4 m-2 ">
+        <div className=" lg:w-2/5 border-[#1B3E90] border-2 flex flex-col gap-3 rounded-3xl p-4 m-2 ">
           <div className="border-[#1B3E9099]  border-[1px] rounded-3xl p-2 grow">
             <VoiceWaves />
             <ChatBox />
@@ -39,7 +39,7 @@ export default function Home() {
             <MoodeRecomendtion />
           </div>
         </div>
-        <div className="md:w-2/5  border-[#1B3E90] border-2 flex flex-col gap-3 rounded-3xl p-4 m-2 ">
+        <div className="lg:w-2/5  border-[#1B3E90] border-2 flex flex-col gap-3 rounded-3xl p-4 m-2 ">
           <SuccessfulyRate />
           <ProductRecommendations />
         </div>

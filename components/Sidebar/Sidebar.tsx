@@ -23,10 +23,14 @@ const MenuItem: React.FC<MenuItemProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center flex-col ${collapsed ? "justify-center" : "justify-start"} gap-4 px-6 py-4 w-full text-white hover:text-[#1B3E90] transition-colors duration-200 ${collapsed ? "" : "justify-start"}`}
+      className={`flex items-center flex-col ${collapsed ? "justify-center" : "justify-start"} gap-2 md:gap-4 px-4 py-2 md:px-6 md:py-4 w-full text-white hover:text-[#1B3E90] transition-colors duration-200`}
     >
       <span className="flex-shrink-0">{icon}</span>
-      {<span className="whitespace-nowrap text-[10px]">{label}</span>}
+      {
+        <span className="whitespace-nowrap text-[8px] md:text-[9px] lg:text-[10px]">
+          {label}
+        </span>
+      }
     </button>
   );
 };
@@ -63,7 +67,9 @@ const Sidebar = () => {
       <div className="rounded-2xl ">
         <div
           className={`h-full transition-all duration-300 ${
-            collapsed ? "w-[80px]" : "w-[250px]"
+            collapsed
+              ? "w-[64px] md:w-[72px] lg:w-[80px]"
+              : "w-[200px] md:w-[225px] lg:w-[250px]"
           }`}
         >
           <div className="h-full bg-[#04050ce5] rounded-xl overflow-hidden">

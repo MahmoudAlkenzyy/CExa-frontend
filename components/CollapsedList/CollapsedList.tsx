@@ -87,10 +87,10 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
             name="product-recommendations"
             className="border border-[#1B3E90] rounded-xl overflow-hidden bg-[#0D204B]/30"
           >
-            <summary className="cursor-pointer px-4 py-1.5 font-medium hover:bg-[#1B3E90]/20 transition-colors">
+            <summary className="cursor-pointer px-2 py-1 md:px-4 md:py-1.5 font-medium hover:bg-[#1B3E90]/20 transition-colors text-xs md:text-sm lg:text-base">
               {`${item.title || idx + 1}`}
             </summary>
-            <div className="px-4 py-2 text-white max-h-[150px] overflow-y-auto text-[11px] border-t border-[#1B3E90]/30">
+            <div className="px-3 py-1.5 md:px-4 md:py-2 text-white max-h-[150px] overflow-y-auto text-[9px] md:text-[10px] lg:text-[11px] border-t border-[#1B3E90]/30">
               {/* <Markdown> */}
               {<ProductTextRenderer apiText={formattedMarkdown} />}
               {/* </Markdown> */}

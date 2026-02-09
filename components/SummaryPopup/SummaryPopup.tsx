@@ -66,7 +66,7 @@ export const SummaryPopup = ({
   return (
     <div className="">
       {showSummary && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[black/70] backdrop-blur-sm ">
+        <div className="fixed inset-0  z-[100] flex items-center justify-center bg-[black/70] backdrop-blur-sm ">
           <div className="bg-[#050711] relative border border-[#1B3E90] p-8 rounded-3xl  overflow-hidden translate-y-5 max-w-4xl w-full mx-4 text-white text-center">
             <h3 className="text-2xl relative z-10  mb-4 border-[#1B3E90] border rounded-xl  p-2">
               {language === "ar" ? "تقييم المكالمة" : "Call Evaluation"}

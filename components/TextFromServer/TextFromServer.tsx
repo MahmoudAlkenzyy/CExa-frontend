@@ -50,10 +50,10 @@ export function renderTextWithImages(text: string) {
         boldParts.push(
           <strong
             key={`${i}-${match.index}`}
-            className="font-semibold text-gray-800"
+            className="font-semibold text-white"
           >
             {match[1]}
-          </strong>
+          </strong>,
         );
         lastIndex = match.index + match[0].length;
       }
@@ -68,11 +68,9 @@ export function renderTextWithImages(text: string) {
     return (
       <div key={index} className="mb-2">
         {isBullet ? (
-          <li className="list-disc list-inside text-gray-800">
-            {formattedParts}
-          </li>
+          <li className="list-disc list-inside text-white">{formattedParts}</li>
         ) : (
-          <p className="text-gray-800">{formattedParts}</p>
+          <p className="text-white">{formattedParts}</p>
         )}
       </div>
     );

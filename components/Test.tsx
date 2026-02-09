@@ -66,7 +66,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
       extractData(data.message);
       //   console.log(data);
 
-    //   console.log({ data: extractData(data.message) });
+      //   console.log({ data: extractData(data.message) });
     } catch (err) {
       console.log({ err });
     }
@@ -94,12 +94,12 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
 
     const speechConfig = sdk.SpeechConfig.fromSubscription(
       subscriptionKey,
-      serviceRegion
+      serviceRegion,
     );
     speechConfig.speechRecognitionLanguage = "ar-EG";
     speechConfig.setProperty(
       sdk.PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs,
-      "1"
+      "1",
     );
 
     // ✅ Add Phrase Hints for English Words
@@ -117,7 +117,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
     recognizerRef.current = new sdk.SpeechRecognizer(speechConfig, audioConfig);
 
     const phraseConfig = sdk.PhraseListGrammar.fromRecognizer(
-      recognizerRef.current
+      recognizerRef.current,
     );
     phraseList.forEach((phrase) => phraseConfig.addPhrase(phrase));
 
@@ -131,7 +131,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
       },
       (err) => {
         console.error("Error starting recognition:", err);
-      }
+      },
     );
 
     await initializeAudioContext(audioContextRef, analyserRef, dataArrayRef);
@@ -149,7 +149,7 @@ const VoiceBotton: React.FC<VoiceBottonProps> = ({ setClient, client }) => {
         },
         (err) => {
           console.error("Error stopping recognition:", err);
-        }
+        },
       );
     }
 

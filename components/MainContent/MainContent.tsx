@@ -95,8 +95,8 @@
 //             توصيات بناء على حالة العميل
 //           </h2>
 //           <div
-//             className={` ${sentiment == "negative" && "bg-red-50"} 
-//                ${sentiment == "positive" && "bg-green-50"} 
+//             className={` ${sentiment == "negative" && "bg-red-50"}
+//                ${sentiment == "positive" && "bg-green-50"}
 //                ${
 //                  sentiment == "neutral" && "bg-yellow-50"
 //                }  p-2 rounded-lg mb-2`}
@@ -104,9 +104,9 @@
 //             <p
 //               className={`
 
-//                ${sentiment == "negative" && "text-red-600"} 
-//                ${sentiment == "positive" && "text-green-600"} 
-//                ${sentiment == "neutral" && "text-yellow-600"} 
+//                ${sentiment == "negative" && "text-red-600"}
+//                ${sentiment == "positive" && "text-green-600"}
+//                ${sentiment == "neutral" && "text-yellow-600"}
 //               flex items-center gap-1 `}
 //             >
 //               {sentiment == "positive" && <IoMdHappy size={20} />}

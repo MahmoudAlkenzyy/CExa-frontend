@@ -1,19 +1,17 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 
-import { FaFaceMeh } from "react-icons/fa6";
+import { FaFaceMeh, FaRegFaceAngry } from "react-icons/fa6";
 import { IoMdHappy } from "react-icons/io";
-import { FaRegAngry } from "react-icons/fa";
 
 import useSpeachStore from "../../lib/store";
-import { Card } from "@radix-ui/themes";
 import { sendInitData } from "../../app/test/page";
 import { RandomId } from "../../constant";
+
 const MoodeRecomendtion: React.FC = () => {
   const updatData = useSpeachStore((state) => state.updateData);
   const sentimentSocket = useRef<WebSocket | null>(null);
-  //   const sent = client[client.length - 1];
-  const { SpeachData } = useSpeachStore((state) => state);
+  const { SpeachData, language } = useSpeachStore((state) => state);
   const SENTIMENT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5004";
 
   useEffect(() => {
@@ -42,33 +40,53 @@ const MoodeRecomendtion: React.FC = () => {
     };
   }, []);
 
+  console.log({ SpeachData });
+
   return (
-    <div dir="rtl" className=" h-full ">
-      <Card className="!py-2 mb- h-full  bg-white text-xs">
-        <div className="text-gray-600 mb-1 h-full   border-[#E5212121] px-[8px] py-[10px]  border rounded-lg border-solid">
-          <h2 className=" mb-2 px-4 text-white rounded py-2 bg-[#1B3E90] flex justify-between">
-            <span>توصيات بناء على حالة العميل</span>
-            <p
-              className={`
-
-               ${SpeachData.sentiment == "negative" && "text-red-600"} 
-               ${SpeachData.sentiment == "positive" && "text-green-600"} 
-               ${SpeachData.sentiment == "neutral" && "text-yellow-600"} 
-              flex items-center gap-1 `}
-            >
-              {SpeachData.sentiment == "positive" && <IoMdHappy size={16} />}
-              {SpeachData.sentiment == "neutral" && <FaFaceMeh size={16} />}
-              {SpeachData.sentiment == "negative" && <FaRegAngry size={16} />}
-              {SpeachData.sentiment}
-            </p>
-          </h2>
-
-          <p className=" h-[30%] min-h-10    ">
-            {SpeachData.moodRecomendtion ||
-              "لا توجد توصيات متاحة في الوقت الحالي."}
+    <div dir={language === "ar" ? "rtl" : "ltr"} className=" h-full ">
+      <div className="!py-2 mb- h-full  bg-transparent text-xs">
+        <div className="text-gray-600 mb-1 h-full   px-[8px] py-[10px]   rounded-lg ">
+          <p className="text-[20px] text-white mb-3">
+            {language === "ar"
+              ? "توصيات بناء على حالة العميل"
+              : "Sentiment-based Recommendations"}
           </p>
+
+          <div className="flex ">
+            <div className="bg-[#1B3E90] text-white grow rounded-3xl px-4 py-2 text-[16px] ">
+              <p>
+                {SpeachData.moodRecomendtion ||
+                  (language === "ar"
+                    ? "لا توجد توصيات متاحة في الوقت الحالي."
+                    : "No recommendations available at the moment.")}
+              </p>
+            </div>
+            <div className="flex flex-col">
+              <div
+                className={`text-white flex items-center flex-col gap-6  p-2`}
+              >
+                <span className="">
+                  {SpeachData.sentiment === "Positive" && (
+                    <IoMdHappy size={20} className="text-current" />
+                  )}
+                  {SpeachData.sentiment === "Neutral" && (
+                    <FaFaceMeh size={20} className="text-current" />
+                  )}
+                  {SpeachData.sentiment === "Negative" && (
+                    <FaRegFaceAngry size={20} className="text-current" />
+                  )}
+                </span>
+                {SpeachData.sentiment === "Positive" &&
+                  (language === "ar" ? "ايجابي" : "Positive")}
+                {SpeachData.sentiment === "Neutral" &&
+                  (language === "ar" ? "متوسط" : "Neutral")}
+                {SpeachData.sentiment === "Negative" &&
+                  (language === "ar" ? "سلبي" : "Negative")}
+              </div>
+            </div>{" "}
+          </div>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

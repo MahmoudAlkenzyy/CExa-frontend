@@ -57,7 +57,7 @@ const MainLeftSidebar: React.FC<MainLeftSidebarProps> = ({ rec }) => {
     const key = process.env.NEXT_PUBLIC_AZURE_NER_KEY || "";
     const client = new TextAnalyticsClient(
       endpoint,
-      new AzureKeyCredential(key)
+      new AzureKeyCredential(key),
     );
     const results: RecognizeCategorizedEntitiesResultArray =
       await client.recognizeEntities([rec]);
@@ -73,7 +73,7 @@ const MainLeftSidebar: React.FC<MainLeftSidebarProps> = ({ rec }) => {
         }));
       } else {
         console.error(
-          `Error: ${(result as TextAnalyticsErrorResult).error.message}`
+          `Error: ${(result as TextAnalyticsErrorResult).error.message}`,
         );
         return [];
       }
@@ -163,9 +163,9 @@ const MainLeftSidebar: React.FC<MainLeftSidebarProps> = ({ rec }) => {
               <h3 dir="" className="font-medium py-1 pb-3 text-end">
                 {data.name}
               </h3>
-                          {/* <ReactMarkdown> */}
-                          {formattedMarkdown}
-                      {/* </ReactMarkdown> */}
+              {/* <ReactMarkdown> */}
+              {formattedMarkdown}
+              {/* </ReactMarkdown> */}
               {/* <AccordionDemo data={data.data} /> */}
             </div>
           </div>

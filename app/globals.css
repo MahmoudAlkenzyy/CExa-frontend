@@ -51,7 +51,7 @@ body {
 }
 @media (min-width: 800px) {
   .containerr {
-    min-height: calc(100vh - 50px) !important;
-    max-height: calc(100vh - 50px);
+    min-height: calc(100vh - 76px) !important;
+    max-height: calc(100vh - 76px);
   }
 }

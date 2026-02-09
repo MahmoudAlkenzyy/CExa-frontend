@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Card, Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
+import { Flex, ScrollArea, Skeleton, Text } from "@radix-ui/themes";
 // import AccordionDemo from "../Accordion/Accordion";
-import CollapsedList from "../CollapsedList/CollapsedList";
 import { RandomId } from "../../constant";
 import ProductTextRenderer from "./../TextFromServer/TextFromServer";
 
@@ -14,57 +13,50 @@ export interface NerDTO {
   confidenceScore: number;
 }
 
+import useSpeachStore from "@/lib/store";
+
 const ProductRecommendations = () => {
+  const { language } = useSpeachStore();
   const WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5002";
 
   const wsRef = useRef<WebSocket | null>(null);
-  const responseRef = useRef("");
-  const [history, setHistory] = useState<
-    { text: string; title: string | undefined }[]
-  >([]);
-  //   const [isDone, setIsDone] = useState(false);
+  const [streamingText, setStreamingText] = useState("");
 
   useEffect(() => {
     const sendInitData = (socket: WebSocket) => {
       socket.onopen = () => {
         socket.send(RandomId);
-        // ws.send("false");
       };
     };
-    // 1) Open connection
     const ws = new WebSocket(WS_URL);
     wsRef.current = ws;
 
     ws.onmessage = (event) => {
       const msg = event.data as string;
-      //   console.log({ msg });
+      console.log({ msg });
 
       if (msg === "This is not relevant") {
         return;
       }
       if (msg === "This is not from our products") {
-        responseRef.current = "هذا ليس من منتجاتنا";
+        setStreamingText(
+          language === "ar"
+            ? "هذا ليس من منتجاتنا"
+            : "This is not from our products",
+        );
         return;
       }
 
-      // 2) End marker — push to history, then clear
       if (msg === "End Here!!") {
-        setHistory((prev) => [
-          ...prev,
-          { text: responseRef.current, title: undefined },
-        ]);
-        // setResponse("");
         return;
       }
 
-      // 3) Start marker — just clear buffer
       if (msg === "Start Here!!") {
-        responseRef.current = "";
+        setStreamingText("");
         return;
       }
 
-      // 4) Otherwise accumulate
-      responseRef.current += msg;
+      setStreamingText((prev) => prev + msg);
     };
 
     ws.onerror = (err) => {
@@ -76,13 +68,10 @@ const ProductRecommendations = () => {
     };
 
     sendInitData(wsRef.current);
-    // 3) Clean up on unmount
     return () => {
       ws.close();
     };
-  }, []);
-
-  //   console.log(responseRef.current);
+  }, [language]);
 
   const formatToMarkdown = (text: string) => {
     return text
@@ -91,34 +80,25 @@ const ProductRecommendations = () => {
       .replace(/\[doc\d+\]/g, "");
   };
 
-  const formattedMarkdown = formatToMarkdown(responseRef.current);
+  const formattedMarkdown = formatToMarkdown(streamingText);
 
   return (
-    <div dir="rtl" className="w-full h-full ">
-      <Card className="p-4 ps-0 bg-white h-full text-xs">
-        <h2 className="font-semibold  mb-2 px-4 text-white rounded py-2 bg-[#1B3E90]">
-          توصيات المنتجات والخدمات
+    <div dir={language === "ar" ? "rtl" : "ltr"} className="w-full h-full  ">
+      <div className="p-4 ps-0 text-white h-full text-xs border-[#1B3E90] border-2  rounded-3xl">
+        <h2 className="font-semibold text-lg mb-2 px-4 text-white rounded py-2 ">
+          {language === "ar"
+            ? "توصيات المنتجات والخدمات"
+            : "Product and Service Recommendations"}
         </h2>
-        <ScrollArea className="">
+        <ScrollArea className=" no-scrollbar np-scrollbar overflow-y-auto">
           <div className="space-y-4 h-full">
-            <div className="bg-gray-50 h-full overflow-y-scroll max-h-[60vh] ps-0 overflow-x-hidden  rounded-lg p-4">
-              {/* <Image
-                width={800}
-                height={400}
-                src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=300"
-                alt="iPhone"
-                className="w-full h-48 object-cover rounded-lg mb-2"
-              /> */}
-
-              {responseRef.current ? (
-                <>
-                  {/* {responseRef.current} */}
+            <div className="max-h-[100%]  overflow-y-scroll  ps-0 overflow-x-hidden no-scrollbar  rounded-lg p-4">
+              {streamingText ? (
+                <div className="">
                   <ProductTextRenderer apiText={formattedMarkdown} />
-
-                  <CollapsedList items={history} setItems={setHistory} />
-                </>
+                </div>
               ) : (
-                <div dir="rtl" className="rtl">
+                <div dir={language === "ar" ? "rtl" : "ltr"}>
                   <Flex direction="column" gap="2">
                     <Text>
                       <Skeleton>Lorem ipsum dolor sit amet.</Skeleton>
@@ -139,11 +119,10 @@ const ProductRecommendations = () => {
                   </Flex>
                 </div>
               )}
-              {/* <AccordionDemo data={data.data} /> */}
             </div>
           </div>
         </ScrollArea>
-      </Card>
+      </div>
     </div>
   );
 };

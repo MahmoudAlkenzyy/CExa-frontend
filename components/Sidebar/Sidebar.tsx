@@ -1,33 +1,106 @@
-"use client"
-import React, { useState } from 'react'
-import {FaPhone } from 'react-icons/fa';
-import {  FaRegStar, FaUsers } from 'react-icons/fa6';
-import { IoIosHome } from 'react-icons/io';
+"use client";
+import React, { useState } from "react";
+import { FaPhone } from "react-icons/fa";
+import { FaRegStar, FaUsers } from "react-icons/fa6";
+import { IoIosHome } from "react-icons/io";
 import { MdOutlineMessage } from "react-icons/md";
-import { FiAlignJustify } from "react-icons/fi";
-import { Sidebar as SidebarPro, Menu, MenuItem } from 'react-pro-sidebar';
+import { FiAlignJustify, FiPhone } from "react-icons/fi";
+import useSpeachStore from "@/lib/store";
 
-const Sidebar = () => {
-        const [collapsed,setCollapsed] = useState(true)
-    
-    return (
-<>
-    <SidebarPro  collapsed={collapsed}  className={`h-full absolute top-0 bottom-0 left-0 z-50 `} >
-      <Menu className='bg-[#1B3E90] h-full text-white  ' >
-      
-              <MenuItem className=' hover:siblings x hover:text-[#1B3E90]' icon={<FiAlignJustify  className={`transition-all ${!collapsed? "rotate-90":""}`} size={21} />}  onClick={()=>setCollapsed(v=>!v)}>  </MenuItem>
-          <MenuItem className=' hover:siblings x hover:text-[#1B3E90]' icon={<IoIosHome size={21}/>}> Home </MenuItem>
-          <MenuItem className=' hover:siblings x hover:text-[#1B3E90]' icon={<FaPhone size={21} className='rotate-90'/>}> Calls </MenuItem>
-  
-        <MenuItem className=' hover:siblings x hover:text-[#1B3E90]' icon={<FaUsers size={21} />}> Contacts </MenuItem>
-              <MenuItem className=' hover:siblings x hover:text-[#1B3E90]' icon={<MdOutlineMessage  size={21}/>}> Message </MenuItem>
-              <MenuItem className=' hover:siblings x hover:text-[#1B3E90]' icon={<FaRegStar  size={21}/>}> Rate calls </MenuItem>
-      </Menu>
-            </SidebarPro>
-           {!collapsed&& <div className=' transition-all duration-200 md:!static absolute top-0 left-0 bottom-0 z-40 w-full md:bg-opacity-0 bg-black md: bg-opacity-20'>
-            </div>}
-</>
-  )
+interface MenuItemProps {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  collapsed: boolean;
 }
 
-export default Sidebar
+const MenuItem: React.FC<MenuItemProps> = ({
+  icon,
+  label,
+  onClick,
+  collapsed,
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center flex-col ${collapsed ? "justify-center" : "justify-start"} gap-4 px-6 py-4 w-full text-white hover:text-[#1B3E90] transition-colors duration-200 ${collapsed ? "" : "justify-start"}`}
+    >
+      <span className="flex-shrink-0">{icon}</span>
+      {<span className="whitespace-nowrap text-[10px]">{label}</span>}
+    </button>
+  );
+};
+
+const Sidebar = () => {
+  const [collapsed, setCollapsed] = useState(true);
+  const { language } = useSpeachStore();
+
+  const menuItems = [
+    {
+      icon: <IoIosHome size={22} />,
+      label: language === "ar" ? "الرئيسية" : "Home",
+    },
+    {
+      icon: <FiPhone size={22} className="" />,
+      label: language === "ar" ? "المكالمات" : "Calls",
+    },
+    {
+      icon: <FaUsers size={22} />,
+      label: language === "ar" ? "جهات الاتصال" : "Contacts",
+    },
+    {
+      icon: <MdOutlineMessage size={22} />,
+      label: language === "ar" ? "الرسائل" : "Message",
+    },
+    {
+      icon: <FaRegStar size={22} />,
+      label: language === "ar" ? "تقييم" : "Rate calls",
+    },
+  ];
+
+  return (
+    <div className=" grow border-[#1B3E90] border-2   rounded-2xl m-2">
+      <div
+        className={`h-full transition-all duration-300 ${
+          collapsed ? "w-[80px]" : "w-[250px]"
+        }`}
+      >
+        <div className="h-full bg-[#04050C] rounded-xl overflow-hidden">
+          <nav className="flex flex-col h-full">
+            {/* Toggle Button
+            <MenuItem
+              icon={
+                <FiAlignJustify
+                  className={`transition-all duration-300 ${!collapsed ? "rotate-90" : ""}`}
+                  size={21}
+                />
+              }
+              label=""
+              onClick={() => setCollapsed((v) => !v)}
+              collapsed={collapsed}
+            /> */}
+
+            {/* Menu Items */}
+            {menuItems.map((item, index) => (
+              <MenuItem
+                key={index}
+                icon={item.icon}
+                label={item.label}
+                collapsed={collapsed}
+              />
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {!collapsed && (
+        <div
+          className="transition-all duration-200 md:!static absolute top-0 left-0 bottom-0 z-40 w-full md:bg-opacity-0 bg-black bg-opacity-20"
+          onClick={() => setCollapsed(true)}
+        ></div>
+      )}
+    </div>
+  );
+};
+
+export default Sidebar;

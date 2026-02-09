@@ -9,7 +9,7 @@ import Markdown from "markdown-to-jsx";
 const ChatBox: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
-  const { client } = useSpeachStore();
+  const { client, language } = useSpeachStore();
 
   const scrollToBottom = () => {
     if (scrollableDivRef.current) {
@@ -21,52 +21,51 @@ const ChatBox: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [client]);
-  // console.log(client);
+
   const formatToMarkdown = (text: string) => {
     return text
-      .replace("ما يلي:", "ما يلي:\n") // إضافة سطر جديد بعد المقدمة
-      .replace(/- (.*?): (.*?)\./g, "- **$1:** $2") // تحويل العناصر إلى Markdown list
-      .replace(/\[doc\d+\]/g, ""); // إزالة أي روابط أو مراجع غير ضرورية
+      .replace("ما يلي:", "ما يلي:\n")
+      .replace(/- (.*?): (.*?)\./g, "- **$1:** $2")
+      .replace(/\[doc\d+\]/g, "");
   };
-  // console.log({client});
+
+  const welcomeMessage =
+    language === "ar"
+      ? "اهلا بيك يا فندم ازاي اقدر اساعدك"
+      : "Welcome, how can I assist you today?";
 
   return (
     <div
-      dir="rtl"
-      className="bg-white w-full h-full  rounded-xl p-3 py-4 pb-1  mx-auto  text-xs"
+      dir={language === "ar" ? "rtl" : "ltr"}
+      className=" w-full h-full rounded-xl p-3 py-4 pb-1 mx-auto"
     >
-      {/* عنوان المحادثة */}
-      <h3 className="mb-2 px-4 text-white rounded py-2 bg-[#1B3E90]">
-        المحادثة بين الوكيل والعميل
-      </h3>
-
-      {/* رسالة العميل */}
-      <div className="flex flex-col  font-bold items-end my-1">
+      <div
+        className={`flex flex-col font-bold ${language === "ar" ? "items-end" : "items-start"} my-1`}
+      >
         <div
           ref={scrollableDivRef}
-          className=" no-scrollbar  flex flex-col border h-36  md:max-h-full overflow-auto  border-[#AAECDD] rounded-lg px-4 py w-full ma"
+          className="no-scrollbar flex flex-col h-36 md:max-h-full overflow-auto px-4 py w-full"
         >
-          <p className=" text-[#ce6547]  gap-1 w-fit 2 px-4 max-w-[300px]  rounded-lg my-2">
-            <span className="text-xs ">الوكيل: </span>
-            <span>اهلا بيك يا فندم ازاي اقدر اساعدك</span>
+          <p className="text-white gap-1 w-fit px-4 max-w-[300px] bg-[#1B3e90] rounded-2xl py-1 my-1">
+            <span>{welcomeMessage}</span>
           </p>
           {client.map((mess, idx) => {
             return (
               <div className="" key={idx}>
                 {mess.isclient ? (
-                  <p className="    w-fit = text-[#76cfbb]  px-4  rounded-lg my-1">
-                    <span className="text-xs">العميل: </span>
+                  <div
+                    className={`${language === "ar" ? "ms-auto" : "me-auto"} w-fit text-white px-4 rounded-2xl my-1 py-1 bg-[#3f88E5]`}
+                  >
                     <span>{mess.message}</span>
-                  </p>
+                  </div>
                 ) : (
-                  <p className=" text-[#ce6547]  gap-1 w-fit 2 px-4  rounded-lg my-2">
-                    <span className="text-xs ">الوكيل: </span>
+                  <div
+                    className={`text-white gap-1 w-fit px-4 rounded-2xl my-2 bg-[#1B3e90] ${language === "ar" ? "" : ""}`}
+                  >
                     <span>
-                      {/* <ReactMarkdown> */}
                       <Markdown>{formatToMarkdown(mess.message)}</Markdown>
-                      {/* </ReactMarkdown> */}
                     </span>
-                  </p>
+                  </div>
                 )}
               </div>
             );
@@ -75,8 +74,6 @@ const ChatBox: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-
-      {/* رسالة الوكيل */}
     </div>
   );
 };

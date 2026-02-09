@@ -4,10 +4,10 @@ import { SpeachData } from "../types";
 // Define the state and actions types
 interface SpeachState {
   SpeachData: SpeachData; // البيانات الأصلية
-//   positivePercent: number;
-//   neutralPercent: number;
-    //   negativePercent: number;
-    
+  //   positivePercent: number;
+  //   neutralPercent: number;
+  //   negativePercent: number;
+
   moodLabel: string;
   background: string;
   markerPosition: number;
@@ -21,6 +21,10 @@ interface SpeachState {
     point4: string;
     point5: string;
   };
+  mediaStream: MediaStream | null;
+  isRecording: boolean;
+  callDuration: number;
+  language: "ar" | "en";
   updateData: (data: SpeachData) => void;
   updateSum: (sum: {
     point1: string;
@@ -30,16 +34,19 @@ interface SpeachState {
     point5: string;
   }) => void;
   addClient: (newClient: { isclient: boolean; message: string }) => void;
+  setMediaStream: (stream: MediaStream | null) => void;
+  setIsRecording: (recording: boolean) => void;
+  setCallDuration: (duration: number) => void;
+  toggleLanguage: () => void;
 }
 
 // Create the store
 const useSpeachStore = create<SpeachState>((set) => ({
   SpeachData: {
     confidenceScores: 0,
-    
-        sentiment: "neutral",
+
+    sentiment: "neutral",
     moodRecomendtion: "",
-    
   },
   positivePercent: 0,
   neutralPercent: 0,
@@ -49,8 +56,8 @@ const useSpeachStore = create<SpeachState>((set) => ({
   markerPosition: 49,
   maxValue: 0,
   filledBars: 0,
-    client: [],
-  moodeRecomendtion:"",
+  client: [],
+  moodeRecomendtion: "",
   sum: {
     point1: "",
     point2: "",
@@ -58,11 +65,15 @@ const useSpeachStore = create<SpeachState>((set) => ({
     point4: "",
     point5: "",
   },
+  mediaStream: null,
+  isRecording: false,
+  callDuration: 0,
+  language: "ar",
 
   updateData: (data) => {
     const confidenceScores = data.confidenceScores;
-      const sentiment = data.sentiment;
-      const moodRecomendtion = data.moodRecomendtion ;
+    const sentiment = data.sentiment;
+    const moodRecomendtion = data.moodRecomendtion;
     // const maxValue = Math.max(positivePercent, neutralPercent, negativePercent);
     // const filledBars = Math.ceil((maxValue / 100) * 10);
 
@@ -71,26 +82,24 @@ const useSpeachStore = create<SpeachState>((set) => ({
     // let markerPosition = 49;
 
     if (sentiment === "Positive") {
-        
-        moodLabel = "سعيد";
-        background = "#4ADE80";
-        //   markerPosition = 43 - (positivePercent / 100) * 45;
+      moodLabel = "سعيد";
+      background = "#4ADE80";
+      //   markerPosition = 43 - (positivePercent / 100) * 45;
     } else if (sentiment === "Neutral") {
-        moodLabel = "عادي";
-        background = "#FACC15";
-        //   markerPosition = 49;
+      moodLabel = "عادي";
+      background = "#FACC15";
+      //   markerPosition = 49;
     } else if (sentiment === "Negative") {
       moodLabel = "حزين";
       background = "#EA384C";
-    //   markerPosition = (negativePercent / 100) * 45 + 50;
+      //   markerPosition = (negativePercent / 100) * 45 + 50;
     }
 
     set({
-      SpeachData: {confidenceScores,sentiment,moodRecomendtion},
-     
+      SpeachData: { confidenceScores, sentiment, moodRecomendtion },
+
       moodLabel,
       background,
-     
     });
   },
 
@@ -104,6 +113,22 @@ const useSpeachStore = create<SpeachState>((set) => ({
 
   updateSum: (sum) => {
     set({ sum });
+  },
+
+  setMediaStream: (mediaStream) => {
+    set({ mediaStream });
+  },
+
+  setIsRecording: (isRecording) => {
+    set({ isRecording });
+  },
+
+  setCallDuration: (callDuration) => {
+    set({ callDuration });
+  },
+
+  toggleLanguage: () => {
+    set((state) => ({ language: state.language === "ar" ? "en" : "ar" }));
   },
 }));
 

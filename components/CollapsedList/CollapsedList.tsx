@@ -44,7 +44,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
           body: JSON.stringify({
             model_response: lastItemText,
           }),
-        }
+        },
       );
 
       if (!res.ok) {
@@ -60,7 +60,7 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
         return prev.map((item, index) =>
           index === prev.length - 1
             ? { ...item, title: json.title || json.summary || json.response }
-            : item
+            : item,
         );
       });
 
@@ -82,11 +82,15 @@ export default function CollapsedList({ items, setItems }: CollapsedListProps) {
       {items.map((item, idx) => {
         const formattedMarkdown = formatToMarkdown(item.text);
         return (
-          <details key={idx} className="border rounded-lg overflow-hidden">
-            <summary className="cursor-pointer bg-blue-100 px-4 py-2 font-medium">
+          <details
+            key={idx}
+            name="product-recommendations"
+            className="border border-[#1B3E90] rounded-xl overflow-hidden bg-[#0D204B]/30"
+          >
+            <summary className="cursor-pointer px-4 py-1.5 font-medium hover:bg-[#1B3E90]/20 transition-colors">
               {`${item.title || idx + 1}`}
             </summary>
-            <div className="px-4 py-2 bg-white text-gray-800 max-h-[300px] overflow-y-auto">
+            <div className="px-4 py-2 text-white max-h-[150px] overflow-y-auto text-[11px] border-t border-[#1B3E90]/30">
               {/* <Markdown> */}
               {<ProductTextRenderer apiText={formattedMarkdown} />}
               {/* </Markdown> */}

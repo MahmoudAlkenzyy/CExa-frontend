@@ -4,7 +4,7 @@ export const SuccessfulyRate = () => {
   const { SpeachData, language } = useSpeachStore((state) => state);
 
   return (
-    <div className="flex flex-col justify-center items-center border-[#1B3E90] border-2 rounded-3xl p-4 m-2 ">
+    <div className="flex flex-col justify-center items-center border-[#1B3E9099] border-[1px] rounded-3xl p-4 m-2 ">
       <p className="text-white text-xl font-bold text-center pb-4">
         {language === "ar" ? "نسبة نجاح المكالمة" : "Call Success Rate"}
       </p>

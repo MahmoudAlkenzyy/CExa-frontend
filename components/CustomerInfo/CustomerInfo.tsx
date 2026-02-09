@@ -13,7 +13,7 @@ const CustomerInfo = () => {
   return (
     <div
       dir={language === "ar" ? "rtl" : "ltr"}
-      className="flex lg:flex-col grow  text-xs w-full text-white flex-col p-4 h-full rounded-3xl gap-2 overflow-hidden border border-[#1B3E90]"
+      className="flex lg:flex-col grow  text-xs w-full text-white flex-col p-4 h-full rounded-3xl gap-2 overflow-hidden border border-[#1B3E9080]"
     >
       <h2 className="font-semibold text-xl flex items-center gap-1 md:flex-wrap">
         {language === "ar" ? "معلومات العميل" : "Customer Info"}

@@ -53,13 +53,23 @@ const MoodeRecomendtion: React.FC = () => {
           </p>
 
           <div className="flex ">
-            <div className="bg-[#1B3E90] text-white grow rounded-3xl px-4 py-2 text-[16px] ">
+            <div className="bg-[#1B3E90] shadow-[0_0_10px_#1B3E90] relative text-white grow rounded-3xl px-4 py-2 text-[16px] ">
               <p>
                 {SpeachData.moodRecomendtion ||
                   (language === "ar"
                     ? "لا توجد توصيات متاحة في الوقت الحالي."
                     : "No recommendations available at the moment.")}
               </p>
+              <div
+                className="absolute right-6 bottom-0 translate-y-full"
+                style={{
+                  width: 0,
+                  height: 0,
+                  borderLeft: "10px solid transparent",
+                  borderRight: "1px solid transparent",
+                  borderTop: "10px solid #1B3e90",
+                }}
+              ></div>
             </div>
             <div className="flex flex-col">
               <div

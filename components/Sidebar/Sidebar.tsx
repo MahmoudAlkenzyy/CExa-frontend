@@ -59,15 +59,16 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className=" grow border-[#1B3E90] border-2   rounded-2xl m-2">
-      <div
-        className={`h-full transition-all duration-300 ${
-          collapsed ? "w-[80px]" : "w-[250px]"
-        }`}
-      >
-        <div className="h-full bg-[#04050C] rounded-xl overflow-hidden">
-          <nav className="flex flex-col h-full">
-            {/* Toggle Button
+    <div className="bg-gradient-to-b flex grow from-[#0d1d41] via-[#6D94F0] to-[#0d1d41] p-[2px] rounded-2xl m-1">
+      <div className="     rounded-2xl ">
+        <div
+          className={`h-full transition-all duration-300 ${
+            collapsed ? "w-[80px]" : "w-[250px]"
+          }`}
+        >
+          <div className="h-full bg-[#04050C] rounded-xl overflow-hidden">
+            <nav className="flex flex-col h-full">
+              {/* Toggle Button
             <MenuItem
               icon={
                 <FiAlignJustify
@@ -80,25 +81,26 @@ const Sidebar = () => {
               collapsed={collapsed}
             /> */}
 
-            {/* Menu Items */}
-            {menuItems.map((item, index) => (
-              <MenuItem
-                key={index}
-                icon={item.icon}
-                label={item.label}
-                collapsed={collapsed}
-              />
-            ))}
-          </nav>
+              {/* Menu Items */}
+              {menuItems.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  icon={item.icon}
+                  label={item.label}
+                  collapsed={collapsed}
+                />
+              ))}
+            </nav>
+          </div>
         </div>
-      </div>
 
-      {!collapsed && (
-        <div
-          className="transition-all duration-200 md:!static absolute top-0 left-0 bottom-0 z-40 w-full md:bg-opacity-0 bg-black bg-opacity-20"
-          onClick={() => setCollapsed(true)}
-        ></div>
-      )}
+        {!collapsed && (
+          <div
+            className="transition-all duration-200 md:!static absolute top-0 left-0 bottom-0 z-40 w-full md:bg-opacity-0 bg-black bg-opacity-20"
+            onClick={() => setCollapsed(true)}
+          ></div>
+        )}
+      </div>
     </div>
   );
 };

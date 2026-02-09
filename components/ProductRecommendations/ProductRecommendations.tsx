@@ -84,7 +84,7 @@ const ProductRecommendations = () => {
 
   return (
     <div dir={language === "ar" ? "rtl" : "ltr"} className="w-full h-full  ">
-      <div className="p-4 ps-0 text-white h-full text-xs border-[#1B3E90] border-2  rounded-3xl">
+      <div className="p-4 ps-0 text-white h-full text-sm border-[#1B3E9099] border-[1px] max-h-[450px] overflow-hidden rounded-3xl">
         <h2 className="font-semibold text-lg mb-2 px-4 text-white rounded py-2 ">
           {language === "ar"
             ? "توصيات المنتجات والخدمات"

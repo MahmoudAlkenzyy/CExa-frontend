@@ -26,16 +26,16 @@ export default function Home() {
       <div
         className={`w-full flex grow ${language === "ar" ? "flex-row" : "flex-row"}`}
       >
-        <div className=" w-1/5  items-center justify-between bg flex flex-col m-2 rounded-3xl gap-2 p-4 border-[#1B3E90] border-2 border-image-source: radial-gradient(80.42% 21.05% at 14.23% 51.43%, #1C6CB7 0%, #0C3051 100%)">
+        <div className=" w-1/5  items-center justify-between bg flex flex-col m-2 rounded-3xl gap-2 p-4 border-[#1B3E90] border-2 bg-[#0] ">
           <CallRating />
           <CustomerInfo />
         </div>
         <div className=" w-2/5 border-[#1B3E90] border-2 flex flex-col gap-3 rounded-3xl p-4 m-2 ">
-          <div className="border-[#1B3E90] border-t-0 border-r-0 border-2 rounded-3xl p-2 grow">
+          <div className="border-[#1B3E9099]  border-[1px] rounded-3xl p-2 grow">
             <VoiceWaves />
             <ChatBox />
           </div>
-          <div className="border-[#1B3E90]  border-2 rounded-3xl p-2">
+          <div className="border-[#1B3E9099]  border-[1px] rounded-3xl p-2">
             <MoodeRecomendtion />
           </div>
         </div>
@@ -44,10 +44,28 @@ export default function Home() {
           <ProductRecommendations />
         </div>
       </div>
-      <div className="w-full border-[#1B3E90] border-2 rounded-3xl">
-        <AudioRecorderPage />
+      <div className=" w-full bg-gradient-to-r from-[#0d1d41] via-[#384d7e] to-[#0d1d41] p-[1px] rounded-3xl">
+        <div className="m-[1px] rounded-3xl bg-[#04050C]">
+          <AudioRecorderPage />
+        </div>
       </div>
       <TextToSpeach />
+
+      {/**
+ * 
+ * 
+ * 
+ * 
+
+
+
+
+
+
+
+
+ 
+ */}
       {/* <div className="flex  flex-col containerr min-h-[99dvh]     md:w-full  mx-auto pt-[15px]   gap-2 px-4">
         <div className="w-full gap-5 h-[40%] flex flex-wrap  ">
           <div className="w-full md:w-[48%] bg-white rounded-xl flex items-center justify-center">

@@ -27,6 +27,7 @@ interface SpeachState {
   language: "ar" | "en";
   sessionId: string;
   isMuted: boolean;
+  isNoiseCancellationEnabled: boolean;
   updateData: (data: SpeachData) => void;
   updateSum: (sum: {
     point1: string;
@@ -42,6 +43,7 @@ interface SpeachState {
   toggleLanguage: () => void;
   setSessionId: (id: string) => void;
   setIsMuted: (muted: boolean) => void;
+  setIsNoiseCancellationEnabled: (enabled: boolean) => void;
   resetStore: () => void;
 }
 
@@ -76,6 +78,7 @@ const useSpeachStore = create<SpeachState>((set) => ({
   language: "ar",
   sessionId: Math.random().toString(36).substring(7),
   isMuted: false,
+  isNoiseCancellationEnabled: true,
 
   updateData: (data) => {
     const confidenceScores = data.confidenceScores;
@@ -144,6 +147,9 @@ const useSpeachStore = create<SpeachState>((set) => ({
 
   setIsMuted: (isMuted) => {
     set({ isMuted });
+  },
+  setIsNoiseCancellationEnabled: (isNoiseCancellationEnabled) => {
+    set({ isNoiseCancellationEnabled });
   },
 
   resetStore: () => {

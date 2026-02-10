@@ -10,7 +10,17 @@ export function renderTextWithImages(text: string) {
   const paragraphs = text.split(/\n+/).filter(Boolean);
 
   return paragraphs.map((para, index) => {
-    const parts = para.split(urlRegex);
+    let currentText = para.trim();
+    let isH3 = currentText.startsWith("###");
+    let isH2 = !isH3 && currentText.startsWith("##");
+    let isBullet = !isH3 && !isH2 && currentText.startsWith("-");
+
+    // Remove markdown symbols for rendering
+    if (isH3) currentText = currentText.replace(/^###\s*/, "");
+    else if (isH2) currentText = currentText.replace(/^##\s*/, "");
+    else if (isBullet) currentText = currentText.replace(/^- \s*/, "");
+
+    const parts = currentText.split(urlRegex);
 
     const formattedParts = parts.map((part, i) => {
       const lower = part.toLowerCase();
@@ -31,7 +41,7 @@ export function renderTextWithImages(text: string) {
           <a
             key={i}
             href={part}
-            className="text-blue-600 underline"
+            className="text-blue-400 underline"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -62,15 +72,33 @@ export function renderTextWithImages(text: string) {
       return <React.Fragment key={i}>{boldParts}</React.Fragment>;
     });
 
-    // Check for bullet point
-    const isBullet = para.trim().startsWith("-");
+    if (isH3) {
+      return (
+        <h3 key={index} className="text-base font-bold  mt-4 mb-2 pb-1">
+          {formattedParts}
+        </h3>
+      );
+    }
+
+    if (isH2) {
+      return (
+        <h2
+          key={index}
+          className="text-lg font-bold text-white mt-5 mb-3  pb-1"
+        >
+          {formattedParts}
+        </h2>
+      );
+    }
 
     return (
       <div key={index} className="mb-2">
         {isBullet ? (
-          <li className="list-disc list-inside text-white">{formattedParts}</li>
+          <li className="list-disc list-inside text-white py-0.5">
+            {formattedParts}
+          </li>
         ) : (
-          <p className="text-white">{formattedParts}</p>
+          <p className="text-white leading-relaxed">{formattedParts}</p>
         )}
       </div>
     );

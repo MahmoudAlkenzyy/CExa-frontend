@@ -155,23 +155,23 @@ const VoiceWaves: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      <p className="text-xl text-white text-center pt-1">
+      <p className="text-base md:text-lg lg:text-xl text-white text-center pt-1">
         {language === "ar" ? "التفاعل اللحظي" : "Real-time Interaction"}
       </p>
       <canvas
         ref={canvasRef}
         width={500}
         height={115}
-        className=" bg-transparent w-[60%] mx-auto"
+        className=" bg-transparent w-[80%] md:w-[60%] mx-auto"
         style={{ maxWidth: "600px" }}
       />
-      <div className="flex w-full gap-2">
-        <div className="bg-[#0D204B] text-xs grow p-3 rounded-2xl  text-white">
+      <div className="flex w-full gap-2 px-1">
+        <div className="bg-[#0D204B] text-[10px] md:text-sm lg:text-base grow p-2 md:p-3 rounded-2xl text-white text-center">
           {formatTime(callDuration)}
         </div>
-        <div className="bg-[#0D204B] gp-3 rounded-2xl px-3 py-0 flex items-center">
-          <BsMic className="text-white " />
-          <IoPauseCircleOutline className="text-white" />
+        <div className="bg-[#0D204B] rounded-2xl px-3 py-0 flex items-center gap-2">
+          <BsMic className="text-white text-sm md:text-base" />
+          <IoPauseCircleOutline className="text-white text-lg md:text-xl" />
         </div>
       </div>
     </div>

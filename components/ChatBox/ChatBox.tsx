@@ -45,8 +45,9 @@ const ChatBox: React.FC = () => {
         <div
           ref={scrollableDivRef}
           className="no-scrollbar flex flex-col h-64 md:max-h-full overflow-auto px-4 py w-full"
+          dir={language === "ar" ? "rtl" : "ltr"}
         >
-          <p className="relative text-white gap-1 w-fit shadow-[0_0_10px_#1B3e90] px-4 max-w-[300px] bg-[#1B3e90] rounded-2xl py-3 my-2">
+          <p className="relative text-white gap-1 w-fit shadow-[0_0_10px_#1B3e90] ms-auto px-4 max-w-[300px] bg-[#1B3e90] rounded-2xl py-3 my-2">
             <span>{welcomeMessage}</span>
             <div
               className="absolute right-3 bottom-0 translate-y-full"

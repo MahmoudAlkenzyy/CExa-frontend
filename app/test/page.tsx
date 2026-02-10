@@ -41,25 +41,71 @@ const AudioRecorderPage = () => {
   const SAMPLE_RATE = 16000;
   const CHANNELS = 1;
 
-  const connectSockets = (id: string) => {
+  const connectSockets = (id: string): Promise<void> => {
     // Close existing sockets if any
-    if (audioSocket.current) audioSocket.current.close();
-    if (textSocket.current) textSocket.current.close();
+    if (audioSocket.current) {
+      audioSocket.current.close();
+      audioSocket.current = null;
+    }
+    if (textSocket.current) {
+      textSocket.current.close();
+      textSocket.current = null;
+    }
 
-    const audio = new WebSocket(AUDIO_WS_URL);
-    const text = new WebSocket(TEXT_WS_URL);
+    return new Promise((resolve, reject) => {
+      const audio = new WebSocket(AUDIO_WS_URL);
+      const text = new WebSocket(TEXT_WS_URL);
 
-    audioSocket.current = audio;
-    textSocket.current = text;
+      let audioReady = false;
+      let textReady = false;
 
-    text.onmessage = (event) => {
-      const textData = event.data;
-      console.log({ textData });
-      addClient({ isclient: true, message: textData });
-    };
+      const checkBothReady = () => {
+        if (audioReady && textReady) {
+          console.log("✅ Both WebSockets connected and ready");
+          resolve();
+        }
+      };
 
-    audio.onopen = () => audio.send(id);
-    text.onopen = () => text.send(id);
+      audio.onopen = () => {
+        console.log("🎤 Audio WebSocket opened");
+        audio.send(id);
+        audioReady = true;
+        checkBothReady();
+      };
+
+      text.onopen = () => {
+        console.log("💬 Text WebSocket opened");
+        text.send(id);
+        textReady = true;
+        checkBothReady();
+      };
+
+      audio.onerror = (err) => {
+        console.error("❌ Audio WebSocket error:", err);
+        reject(new Error("Audio WebSocket connection failed"));
+      };
+
+      text.onerror = (err) => {
+        console.error("❌ Text WebSocket error:", err);
+        reject(new Error("Text WebSocket connection failed"));
+      };
+
+      text.onmessage = (event) => {
+        const textData = event.data;
+        console.log({ textData });
+        addClient({ isclient: true, message: textData });
+      };
+
+      audioSocket.current = audio;
+      textSocket.current = text;
+
+      // Timeout after 5 seconds
+      setTimeout(() => {
+        if (!audioReady || !textReady) {
+          reject(new Error("WebSocket connection timeout"));
+        }
+      }, 5000);
+    });
   };
 
   useEffect(() => {
@@ -196,37 +242,55 @@ const AudioRecorderPage = () => {
 
   const startRecording = async () => {
     if (!isRecordingLocal) {
-      resetStore();
-      const newId = Math.random().toString(36).substring(7);
-      setSessionId(newId);
-      connectSockets(newId);
-      await initializeAudio();
-      setShowSummary(false);
+      try {
+        resetStore();
+        const newId = Math.random().toString(36).substring(7);
+        setSessionId(newId);
+
+        // Wait for sockets to be fully connected before initializing audio
+        await connectSockets(newId);
+        await initializeAudio();
+        setShowSummary(false);
+      } catch (error) {
+        console.error("Failed to start recording:", error);
+        alert("Failed to connect. Please try again.");
+      }
     }
   };
 
   const stopRecording = async () => {
+    // Clear the message handler to prevent stale socket references
+    if (processorRef.current) {
+      processorRef.current.port.onmessage = null;
+      processorRef.current.disconnect();
+      processorRef.current = null;
+    }
+
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
     }
+
     if (audioContextRef.current) {
-      audioContextRef.current.close();
+      await audioContextRef.current.close();
+      audioContextRef.current = null;
     }
 
     // Close sockets
-    if (audioSocket.current) audioSocket.current.close();
-    if (textSocket.current) textSocket.current.close();
+    if (audioSocket.current) {
+      audioSocket.current.close();
+      audioSocket.current = null;
+    }
+    if (textSocket.current) {
+      textSocket.current.close();
+      textSocket.current = null;
+    }
 
     setIsRecordingLocal(false);
     setIsRecording(false);
     setMediaStream(null);
 
     setShowSummary(true);
-
-    // Call API for summary
-    // if (isRecordingLocal) {
-    //   fetchSummary();
-    // }
   };
 
   //   const fetchSummary = async () => {

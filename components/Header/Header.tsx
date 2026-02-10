@@ -9,10 +9,10 @@ const Header = () => {
   const { language, toggleLanguage } = useSpeachStore();
 
   return (
-    <header className="shadow-sm p-4 z-[60] py-1 sticky top-0  px-3">
+    <header className="shadow-sm p-4 z-[60] py-1 sticky top-0  md:px-3 px-1">
       <div className="flex items-center border-[.5px] border-[#1B3E90] justify-between px-10 p-2 w-full text-white h-full  rounded-xl">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-white">CExa</h1>
+          <h1 className="md:text-2xl text-xl font-bold text-white">CExa</h1>
           <svg
             width="105"
             height="51"
@@ -67,7 +67,7 @@ const Header = () => {
           </svg>
         </div>
 
-        <div className="relative w-1/2 rounded border border-[#1B3E9090] pe-5 ">
+        <div className="relative w-1/2 rounded hidden md:block border border-[#1B3E9090] pe-5 ">
           <Input
             placeholder={language === "ar" ? "بحث..." : "Search..."}
             dir={language === "ar" ? "rtl" : "ltr"}

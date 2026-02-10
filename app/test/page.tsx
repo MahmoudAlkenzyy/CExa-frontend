@@ -224,7 +224,7 @@ const AudioRecorderPage = () => {
   return (
     <div className="relative">
       {/* Control Buttons */}
-      <div className="flex justify-center gap-5 text-white rounded-b-xl py-5">
+      <div className="flex justify-center gap-2 md:gap-5 text-white rounded-b-xl py-5 px-2 md:px-0">
         <button
           onClick={startRecording}
           disabled={isRecordingLocal}
@@ -239,11 +239,15 @@ const AudioRecorderPage = () => {
           className={`text-white flex ${language === "ar" ? "flex-row-reverse" : "flex-row"} gap-2 items-center`}
         >
           {" "}
-          <span className="text-[#A6A1A1]">
+          <span className="md:text-base text-sm text-[#A6A1A1]">
             {language === "ar" ? "جاري التسجيل" : "Recording"}
           </span>
-          <span>{formatTime(callDuration)}</span>
-          <span>{language === "ar" ? "محمود الكنزي" : "Mahmoud Al-Kenzi"}</span>
+          <span className="md:text-base text-sm">
+            {formatTime(callDuration)}
+          </span>
+          <span className="md:text-base text-sm">
+            {language === "ar" ? "محمود الكنزي" : "Mahmoud Al-Kenzi"}
+          </span>
         </p>
         <button
           onClick={toggleMute}

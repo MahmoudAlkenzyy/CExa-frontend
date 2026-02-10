@@ -12,7 +12,8 @@ import AudioRecorderPage from "../app/test/page";
 import Sidebar from "./Sidebar/Sidebar";
 import ModeState from "./MoodState/ModeState";
 import CustomerInfo from "./CustomerInfo/CustomerInfo";
-import CallRating from './CallRating/CallRating';
+import CallRating from "./CallRating/CallRating";
+import { OutboundCallSimulator } from "./OutboundCallSimulator/OutboundCallSimulator";
 
 export {
   Header,
@@ -21,12 +22,14 @@ export {
   VoiceButton,
   MainRightSidebar,
   ChatBox,
-//   StateSlider,
+  //   StateSlider,
   MoodSlider,
-//   MyStateSlider,
+  //   MyStateSlider,
   MyDialog,
   AudioRecorderPage,
   Sidebar,
   ModeState,
-  CustomerInfo,CallRating
+  CustomerInfo,
+  CallRating,
+  OutboundCallSimulator,
 };

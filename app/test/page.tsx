@@ -5,11 +5,14 @@ import { useState, useRef, useEffect } from "react";
 import { RandomId } from "../../constant";
 import { FaMicrophoneSlash, FaPhone, FaPhoneSlash } from "react-icons/fa6";
 import { MdGraphicEq } from "react-icons/md";
+import { IoCall } from "react-icons/io5";
 import { SummaryPopup } from "../../components/SummaryPopup/SummaryPopup";
+import { OutboundCallSimulator } from "../../components/OutboundCallSimulator/OutboundCallSimulator";
 
 const AudioRecorderPage = () => {
   const [isRecordingLocal, setIsRecordingLocal] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [showOutboundSimulator, setShowOutboundSimulator] = useState(false);
 
   const {
     addClient,
@@ -375,6 +378,17 @@ const AudioRecorderPage = () => {
           />
         </button>
         <button
+          onClick={() => setShowOutboundSimulator(true)}
+          className="border border-[#FACC15] hover:scale-105 transition-all duration-[400] hover:bg-[#FACC15]/10 rounded-full p-3 flex justify-center items-center"
+          title={
+            language === "ar"
+              ? "محاكي المكالمات الصادرة"
+              : "Outbound Call Simulator"
+          }
+        >
+          <IoCall color="#FACC15" size={20} />
+        </button>
+        <button
           onClick={stopRecording}
           disabled={!isRecordingLocal}
           className={`border border-[#E52121] hover:scale-105 transition-all duration-[400] hover:bg-opacity-90 rounded-full p-3 text-white flex justify-center items-center ${
@@ -390,6 +404,11 @@ const AudioRecorderPage = () => {
         setShowSummary={setShowSummary}
         language={language}
         sessionId={sessionId}
+      />
+
+      <OutboundCallSimulator
+        isOpen={showOutboundSimulator}
+        onClose={() => setShowOutboundSimulator(false)}
       />
     </div>
   );

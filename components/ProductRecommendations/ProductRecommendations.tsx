@@ -17,7 +17,7 @@ import useSpeachStore from "@/lib/store";
 
 const ProductRecommendations = () => {
   const { language, sessionId, isRecording } = useSpeachStore();
-  const WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5002";
+  const WS_URL = "https://cexa.northeurope.cloudapp.azure.com/5002";
 
   const wsRef = useRef<WebSocket | null>(null);
   const [streamingText, setStreamingText] = useState("");

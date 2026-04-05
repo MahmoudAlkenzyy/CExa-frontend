@@ -35,7 +35,7 @@ export const SummaryPopup = ({
     setLoading(true);
     try {
       const response = await fetch(
-        "https://cexa-v2.westus.cloudapp.azure.com:5003/conversation-summary",
+        "https://cexa.northeurope.cloudapp.azure.com/5003/conversation-summary",
         {
           method: "POST",
           headers: {

@@ -13,7 +13,7 @@ const MoodeRecomendtion: React.FC = () => {
   const { SpeachData, language, sessionId, isRecording } = useSpeachStore(
     (state) => state,
   );
-  const SENTIMENT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5004";
+  const SENTIMENT_WS_URL = "https://cexa.northeurope.cloudapp.azure.com/5004";
 
   useEffect(() => {
     if (!isRecording) {

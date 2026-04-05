@@ -37,8 +37,8 @@ const AudioRecorderPage = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const processorRef = useRef<AudioWorkletNode | null>(null);
 
-  const AUDIO_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5000";
-  const TEXT_WS_URL = "https://cexa-v2.westus.cloudapp.azure.com:5001";
+  const AUDIO_WS_URL = "https://cexa.northeurope.cloudapp.azure.com/5000";
+  const TEXT_WS_URL = "https://cexa.northeurope.cloudapp.azure.com/5001";
 
   const CHUNK_SIZE = 256;
   const SAMPLE_RATE = 16000;
@@ -300,7 +300,7 @@ const AudioRecorderPage = () => {
   //     try {
   //       // Assuming there's a summary API
   //       const response = await fetch(
-  //         `https://cexa-v2.westus.cloudapp.azure.com:5003/summary/${sessionId}`,
+  //         `https://cexa.northeurope.cloudapp.azure.com/5003/summary/${sessionId}`,
   //       );
   //       const data = await response.json();
   //       setSummaryData(data);

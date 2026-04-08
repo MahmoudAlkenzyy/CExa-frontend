@@ -4,13 +4,17 @@ import React, { useEffect, useRef } from "react";
 import { sendInitData } from "../../app/test/page";
 import { useStore } from "zustand";
 import useSpeachStore from "../../lib/store";
-
+export interface Interaption {
+  client_id: string;
+  interrupt: boolean;
+  timestamp: number;
+}
 export default function TextToSpeach() {
   const SPEECH_URL = "wss://cexa.northeurope.cloudapp.azure.com/5008";
-  //   const INTERAPTION_URL = "wss://cexa.northeurope.cloudapp.azure.com/5006";
+  const INTERAPTION_URL = "wss://cexa.northeurope.cloudapp.azure.com/5009";
   const SAMPLE_RATE = 24000; // Must match server sample rate
   const { sessionId, isRecording } = useSpeachStore((state) => state);
-
+  const interaption = useRef(false);
   const socketRef = useRef<WebSocket | null>(null);
   const interaptionSocketRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -26,6 +30,7 @@ export default function TextToSpeach() {
   useEffect(() => {
     if (!isRecording) {
       if (socketRef.current) socketRef.current.close();
+
       if (interaptionSocketRef.current) interaptionSocketRef.current.close();
       return;
     }
@@ -67,19 +72,19 @@ export default function TextToSpeach() {
     }
 
     const ws = new WebSocket(SPEECH_URL);
+    const interaption = new WebSocket(INTERAPTION_URL);
     ws.binaryType = "arraybuffer";
     socketRef.current = ws;
-
-    // const interaption = new WebSocket(INTERAPTION_URL);
-    // interaptionSocketRef.current = interaption;
+    // interaption. = "arraybuffer";
+    interaptionSocketRef.current = interaption;
 
     ws.onopen = () => {
       console.log("🎧 Speech WS open");
     };
 
-    // interaption.onopen = () => {
-    //   console.log("🎧 Interaption WS open");
-    // };
+    interaption.onopen = (e) => {
+      console.log("🎧 Interaption WS open");
+    };
 
     const stopCurrentAudio = () => {
       if (scriptNodeRef.current) {
@@ -98,17 +103,22 @@ export default function TextToSpeach() {
       totalBytesRef.current = 0;
     };
 
-    // interaption.onmessage = (e) => {
-    //   const interapt = e.data;
-    //   if (interapt === "interrupt") {
-    //     allowPlaybackRef.current = false;
-    //     stopCurrentAudio();
-    //   }
-    //   if (interapt === "end_of_speech") {
-    //     allowPlaybackRef.current = true;
-    //   }
-    //   console.log("📩 interrupt flag:", allowPlaybackRef.current);
-    // };
+    interaption.onmessage = (e) => {
+      let interapt: Interaption;
+      try {
+        interapt = JSON.parse(e.data) as Interaption;
+      } catch {
+        console.warn("⚠️ Failed to parse interruption message:", e.data);
+        return;
+      }
+      if (interapt.interrupt) {
+        allowPlaybackRef.current = false;
+        stopCurrentAudio();
+        // Re-enable playback so future TTS responses are not blocked
+        allowPlaybackRef.current = true;
+      }
+      console.log("📩 interrupt flag:", interapt, allowPlaybackRef.current);
+    };
 
     const startAudioPlayback = () => {
       if (!audioContextRef.current || !gainNodeRef.current) return;
@@ -240,7 +250,7 @@ export default function TextToSpeach() {
 
     return () => {
       if (socketRef.current) socketRef.current.close();
-      if (interaptionSocketRef.current) interaptionSocketRef.current.close();
+      //   if (interaptionSocketRef.current) interaptionSocketRef.current.close();
       stopCurrentAudio();
       if (audioContextRef.current) {
         audioContextRef.current.close();

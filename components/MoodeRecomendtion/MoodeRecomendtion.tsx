@@ -52,7 +52,7 @@ const MoodeRecomendtion: React.FC = () => {
     };
   }, [sessionId, isRecording]);
 
-  console.log({ SpeachData });
+  //   console.log({ SpeachData });
 
   return (
     <div dir={language === "ar" ? "rtl" : "ltr"} className=" h-full ">
